@@ -1,7 +1,5 @@
 var path = require('path')
 
 module.exports = {
-  'models-path':     path.resolve('src', 'models'),
-  'migrations-source-path': path.resolve('migrations'),
-  'migrations-compiled-path': path.resolve('migrations')
+  'models-path':     path.resolve('src', 'models')
 }
