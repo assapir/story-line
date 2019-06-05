@@ -1,0 +1,27 @@
+{
+  "name": "story-line",
+  "version": "0.0.1",
+  "description": "",
+  "main": "lib/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/meijin007/story-line.git"
+  },
+  "author": "Assaf Sapir",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/meijin007/story-line/issues"
+  },
+  "homepage": "https://github.com/meijin007/story-line#readme",
+  "devDependencies": {
+    "sequelize-cli-typescript": "^3.2.0-c",
+    "typescript": "^3.5.1"
+  },
+  "dependencies": {
+    "sequelize": "^5.8.7",
+    "sqlite3": "^4.0.8"
+  }
+}

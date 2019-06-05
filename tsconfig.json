@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "strict": true,
+    "inlineSourceMap": true,
+    "sourceRoot": "./src/",
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true
+  },
+  "include": [
+    "src/*",
+    "migrations/*"
+  ]
+}
