@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "sequelize": "^5.8.7",
+    "sequelize-auto-migrations": "^1.0.3",
     "sqlite3": "^4.0.8"
   }
 }

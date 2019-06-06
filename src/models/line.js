@@ -1,18 +1,16 @@
 'use strict';
-
-const Sequelize = require('./index').Sequelize;
-const sequelize = require('./index').sequelize;
-
-export class Line extends Sequelize.models { }
-Line.init({
-  text: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    validate: {
-      len: [5, 254]
+module.exports = (sequelize, DataTypes) => {
+  const Line = sequelize.define('Line', {
+    text: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      validate: {
+        len: [5, 254]
+      }
     }
-  }
-}, {
-  sequelize,
-  modelName: 'line'
-});
+  }, {});
+  Line.associate = models => {
+    Line.belongsTo(models.User);
+  };
+  return Line;
+};
