@@ -1,4 +1,7 @@
 'use strict';
+
+const Sequelize = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   const Line = sequelize.define('Line', {
     text: {

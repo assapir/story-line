@@ -1,4 +1,7 @@
 'use strict';
+
+const Sequelize = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   const Story = sequelize.define('Story', {
     name: {
@@ -7,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         len: [5, 254]
       }
+    }
   }, {});
   Story.associate = models => {
     // associations can be defined here
