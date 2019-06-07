@@ -5,7 +5,7 @@
   "main": "lib/app.js",
   "scripts": {
     "build": "tsc",
-    "start":"nodemon -r ts-node/register ./src/app.ts",
+    "start": "nodemon -r ts-node/register ./src/app.ts",
     "debug": "nodemon --inspect -r ts-node/register ./src/app.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -20,14 +20,19 @@
   },
   "homepage": "https://github.com/meijin007/story-line#readme",
   "devDependencies": {
+    "@types/body-parser": "^1.17.0",
     "@types/express": "^4.17.0",
     "@types/node": "^12.0.7",
     "nodemon": "^1.19.1",
     "sequelize-cli": "^5.4.0",
     "ts-node": "^8.2.0",
+    "tslint": "^5.17.0",
     "typescript": "^3.5.1"
   },
   "dependencies": {
+    "@types/bluebird": "^3.5.27",
+    "@types/validator": "^10.11.0",
+    "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "sequelize": "^5.8.7",
     "sequelize-auto-migrations": "^1.0.3",
