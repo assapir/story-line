@@ -1,16 +1,18 @@
-import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
+import { DevlopementEnviorment } from "../consts";
+
+const env = process.env.NODE_ENV || DevlopementEnviorment;
 
 export class ErrorHandler {
-    public static NotFoundError(
+    public static InternalError(
+        err: Error,
         req: Request,
         res: Response,
         next: NextFunction): void {
-        res.status(404).send(JSON.stringify({ error: "NotFound" }));
+        const message = err.message || "InternalServerError";
+        if (env === DevlopementEnviorment) {
+            console.log(`That esclate quickly! ${message}`);
+        }
+        res.status(500).send(JSON.stringify({ error:  message}));
     }
-
-    public static InternalError(
-        req: Request,
-        res: Response,
-        next: NextFunction,
-        err: ErrorRequestHandler): void
 }

@@ -8,8 +8,14 @@
             "name": "Debug app",
             "type": "node",
             "request": "launch",
-            "args": ["./src/app.ts"],
-            "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
+            "args": [
+                "./src/app.ts"
+            ],
+            "runtimeArgs": [
+                "--nolazy",
+                "-r",
+                "ts-node/register"
+            ],
             "sourceMaps": true,
             "cwd": "${workspaceRoot}",
             "protocol": "inspector",

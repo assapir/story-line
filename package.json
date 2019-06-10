@@ -5,8 +5,9 @@
   "main": "lib/app.js",
   "scripts": {
     "build": "tsc",
-    "start": "nodemon -r ts-node/register ./src/app.ts",
-    "debug": "nodemon --inspect -r ts-node/register ./src/app.ts",
+    "start": "tslint --fix --project \"tsconfig.json\" && node --inspect -r ts-node/register src/app.ts",
+    "dev": "nodemon",
+    "lint": "tslint --fix --project \"tsconfig.json\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
