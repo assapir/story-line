@@ -10,5 +10,11 @@
         "variable-name": false,
         "quotemark": [true, "backtick", "avoid-escape"]
     },
-    "rulesDirectory": []
+    "rulesDirectory": [],
+    "linterOptions": {
+        "exclude": [
+            "src/migrations/*.ts",
+            "lib/**/*"
+        ]
+    }
 }

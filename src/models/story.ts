@@ -1,14 +1,14 @@
-import { AllowNull, Column, HasMany, Length, Model, Table } from "sequelize-typescript";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import Line from "./line";
 
-@Table
-export default class Story extends Model<Story> {
+@Entity()
+export default class Story {
+    @PrimaryGeneratedColumn(`uuid`)
+    public id: string;
 
-    @AllowNull(false)
-    @Length({min: 5, max: 254})
-    @Column
+    @Column({ nullable: false })
     public name: string;
 
-    @HasMany(() => Line)
+    @OneToMany((type) => Line, (line) => line.story)
     public lines: Line[];
 }

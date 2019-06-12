@@ -1,4 +1,5 @@
 export default class NotFoundException extends Error {
+
     private _statusCode: number;
 
     get statusCode() {

@@ -1,23 +1,20 @@
-import { AllowNull, Column, HasMany, IsEmail, Model, Table, Unique } from "sequelize-typescript";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import Line from "./line";
 
-@Table({indexes: [{fields: [`email`], unique: false}]})
-export default class User extends Model<User> {
+@Entity()
+export default class User {
+    @PrimaryGeneratedColumn(`uuid`)
+    public id: string;
 
-    @AllowNull(false)
-    @Column
+    @Column({ nullable: false })
     public firstName: string;
 
-    @AllowNull(false)
-    @Column
+    @Column({ nullable: false })
     public lastName: string;
 
-    @AllowNull(false)
-    @IsEmail
-    @Unique
-    @Column
+    @Column({ nullable: false, unique: true })
     public email: string;
 
-    @HasMany(() => Line)
+    @OneToMany((type) => Line, (line) => line.user)
     public lines: Line[];
 }

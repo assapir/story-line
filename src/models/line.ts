@@ -1,26 +1,22 @@
-import { AllowNull, BelongsTo, Column, ForeignKey, Length, Model, Table } from "sequelize-typescript";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+
 import Story from "./story";
 import User from "./user";
 
-@Table
-export default class Line extends Model<Line> {
+@Entity()
+export default class Line {
 
-    @AllowNull(false)
-    @Length({min: 5, max: 254})
-    @Column
+    @PrimaryGeneratedColumn(`uuid`)
+    public id: string;
+
+    @Column({ nullable: false })
     public text: string;
 
-    @ForeignKey(() => User)
-    @Column
-    public userId: number;
-
-    @BelongsTo(() => User)
+    @ManyToOne((type) => User, (user) => user.lines)
+    @JoinColumn()
     public user: User;
 
-    @ForeignKey(() => Story)
-    @Column
-    public storyId: number;
-
-    @BelongsTo(() => Story)
+    @ManyToOne((type) => Story, (story) => story.lines)
+    @JoinColumn()
     public story: Story;
 }

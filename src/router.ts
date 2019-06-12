@@ -1,6 +1,6 @@
 import * as bodyParser from "body-parser";
 import * as express from "express";
-import { ErrorHandler } from "./controllers/errorHandler";
+import { ErrorHandler } from "./controllers/errorHandlerController";
 
 const prefix: string = `api`;
 const version: string = `1`;
