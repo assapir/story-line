@@ -5,7 +5,7 @@ export default class NotFoundException extends Error {
         return this._statusCode;
     }
 
-    constructor(statusCode: number = 404, message: string = "Not found") {
+    constructor(statusCode: number = 404, message: string = `Not found`) {
         super(message);
         this._statusCode = statusCode;
     }

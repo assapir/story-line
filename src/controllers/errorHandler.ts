@@ -9,7 +9,7 @@ export class ErrorHandler {
         req: Request,
         res: Response,
         next: NextFunction): void {
-        const message = err.message || "InternalServerError";
+        const message = err.message || `InternalServerError`;
         if (env === DevlopementEnviorment) {
             console.log(`That esclate quickly! ${message}`);
         }
