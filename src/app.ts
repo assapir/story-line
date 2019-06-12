@@ -12,6 +12,6 @@ const app = express();
 
 (async () => {
     const connection = await createConnection();
-    Router.route(app);
+    Router.route(app, connection);
     app.listen(port);
 })();

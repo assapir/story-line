@@ -3,7 +3,7 @@ import { DevlopementEnviorment } from "../consts";
 
 const env = process.env.NODE_ENV || DevlopementEnviorment;
 
-export class ErrorHandler {
+export class ErrorHandlerController {
     public static InternalError(
         err: Error,
         req: Request,
