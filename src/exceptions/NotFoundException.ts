@@ -1,13 +1,7 @@
-export default class NotFoundException extends Error {
+import Exception from "./expetion";
 
-    private _statusCode: number;
-
-    get statusCode() {
-        return this._statusCode;
-    }
-
-    constructor(statusCode: number = 404, message: string = `Not found`) {
-        super(message);
-        this._statusCode = statusCode;
+export default class NotFoundException extends Exception {
+    constructor(message: string = `Not Found`) {
+        super(404, message);
     }
 }
