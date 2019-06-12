@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, Index, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import Line from "./line";
 
 @Entity()
@@ -12,7 +12,8 @@ export default class User {
     @Column({ nullable: false })
     public lastName: string;
 
-    @Column({ nullable: false, unique: true })
+    @Index({ unique: true })
+    @Column({ nullable: false })
     public email: string;
 
     @OneToMany((type) => Line, (line) => line.user)
