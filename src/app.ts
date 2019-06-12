@@ -11,7 +11,7 @@ const port = config.port || 80;
 const app = express();
 
 (async () => {
-    const connection = await createConnection(`default`);
+    const connection = await createConnection();
     Router.route(app);
     app.listen(port);
 })();
