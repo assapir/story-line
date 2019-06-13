@@ -1,7 +1,8 @@
 language: nodejs
 node_js:
-  - node
-  - lts/*
+  - 10
+  - 9
+  - 8
 
 os: 
   - osx
