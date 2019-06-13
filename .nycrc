@@ -3,5 +3,9 @@
     "all": true,
     "exclude": [
         "src/migrations/*.ts"
+    ],
+    "reporter": [
+        "text",
+        "lcovonly"
     ]
 }

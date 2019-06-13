@@ -1,6 +1,7 @@
 language: node_js
 node_js:
   - 12
+  - 11
   - 10
   - node
 
@@ -15,7 +16,7 @@ before_script:
   - npm run build
 
 script:
-  - npm run test
+  - npm run test:ci
 
 notifications:
   email: false
