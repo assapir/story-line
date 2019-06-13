@@ -4,6 +4,7 @@ import BadRequestException from "../exceptions/badRequestException";
 import NotFoundException from "../exceptions/notFoundException";
 import Line from "../models/line";
 
+// `/lines`
 class LineController {
 
     private readonly _repository: Repository<Line>;
@@ -12,6 +13,7 @@ class LineController {
         this._repository = repository;
     }
 
+    // get(`/`)
     public async getAllLines(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const allLines = await this._repository.find();
@@ -25,6 +27,7 @@ class LineController {
         }
     }
 
+    // post(`/`)
     public async createNewLine(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const text = req.body.text;
@@ -42,6 +45,7 @@ class LineController {
         }
     }
 
+    // get(`/:id`)
     public async getLine(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const id = req.params.id;
@@ -59,6 +63,7 @@ class LineController {
         }
     }
 
+    // delete(`/:id`)
     public async deleteLine(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const id = req.params.id;
@@ -76,6 +81,7 @@ class LineController {
         }
     }
 
+    // put(`/:id`)
     public async updateLine(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const id = req.params.id;

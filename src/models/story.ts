@@ -9,6 +9,9 @@ export default class Story {
     @Column({ nullable: false })
     public name: string;
 
-    @OneToMany((type) => Line, (line) => line.story)
+    @OneToMany((type) => Line, (line) => line.story, {
+        cascade: true,
+        eager: true,
+      })
     public lines: Line[];
 }

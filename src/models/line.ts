@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Repository } from "typeorm";
 
 import Story from "./story";
 import User from "./user";
@@ -13,10 +13,8 @@ export default class Line {
     public text: string;
 
     @ManyToOne((type) => User, (user) => user.lines)
-    @JoinColumn()
     public user: User;
 
     @ManyToOne((type) => Story, (story) => story.lines)
-    @JoinColumn()
     public story: Story;
 }

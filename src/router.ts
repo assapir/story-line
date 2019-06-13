@@ -21,9 +21,14 @@ export class Router {
         app.use(bodyParser.json({}));
         app.use(bodyParser.urlencoded({ extended: true }));
         app.use(`/${prefix}/${apiVersion}/lines`, Router.linesRoute(connection));
+
+        // General 404 handler
+        app.all(`*`, ErrorHandlerController.NotFoundError);
+        // General error handler
         app.use(ErrorHandlerController.InternalError);
     }
 
+    // `/${prefix}/${apiVersion}/lines`
     private static linesRoute(connection: Connection) {
         const lineController = LineController(connection.getRepository(Line));
         const router = expressRouter();
