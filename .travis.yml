@@ -1,0 +1,11 @@
+language: nodejs
+os: 
+  - osx
+  - linux
+
+before_script:
+  - npm install
+  - npm run build
+
+script:
+  - npm run test

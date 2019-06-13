@@ -1,5 +1,6 @@
 # story-line
 #### Many lines becomes a story
+[![Build Status](https://travis-ci.org/meijin007/story-line.svg?branch=master)](https://travis-ci.org/meijin007/story-line)
 <br />
 <br />
 ##### Creating migration
