@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { DevlopementEnviorment } from "../consts";
 import Exception from "../exceptions/expetion";
-import NotFoundException from "../exceptions/NotFoundException";
+import NotFoundException from "../exceptions/notFoundException";
 
 const env = process.env.NODE_ENV || DevlopementEnviorment;
 
@@ -9,7 +9,7 @@ export default class ErrorHandlerController {
     public static NotFoundError(req: Request,
                                 res: Response,
                                 next: NextFunction): void {
-                                    next(new NotFoundException(`Unable to fine resource ${req.originalUrl}`));
+                                    next(new NotFoundException(`Unable to find resource ${req.originalUrl}`));
                                 }
 
     public static InternalError(err: Error,

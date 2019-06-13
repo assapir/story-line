@@ -1,6 +1,6 @@
 import { QueryFailedError, Repository } from "typeorm";
 import BadRequestException from "../exceptions/badRequestException";
-import NotFoundException from "../exceptions/NotFoundException";
+import NotFoundException from "../exceptions/notFoundException";
 import Line from "../models/line";
 
 export default class LineService {

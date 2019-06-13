@@ -1,11 +1,19 @@
 {
     "extends": "@istanbuljs/nyc-config-typescript",
     "all": true,
+    "clean": true,
     "exclude": [
-        "src/migrations/*.ts"
+        "src/migrations/*.ts",
+        "src/consts.ts"
+    ],
+    "include": [
+        "src/**/*.ts"
     ],
     "reporter": [
         "text",
         "lcovonly"
-    ]
+    ],
+    "require": [
+      "ts-node/register"
+   ]
 }
