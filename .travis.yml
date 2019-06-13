@@ -1,12 +1,15 @@
 language: nodejs
 node_js:
+  - 11
   - 10
   - 9
   - 8
+  - node
 
 os: 
   - osx
   - linux
+dist: xenial  
 
 before_script:
   - npm install
