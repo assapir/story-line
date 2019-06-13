@@ -10,7 +10,7 @@
     "lint": "tslint --fix --project \"tsconfig.json\"",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "test": "nyc mocha",
-    "test:ci": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
+    "test:ci": "npm test && nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
     "type": "git",
