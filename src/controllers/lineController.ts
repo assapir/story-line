@@ -1,8 +1,5 @@
-import { NextFunction, Request, Response, Router } from "express";
-import { Repository } from "typeorm";
+import { NextFunction, Request, Response } from "express";
 import BadRequestException from "../exceptions/badRequestException";
-import NotFoundException from "../exceptions/notFoundException";
-import Line from "../models/line";
 import LineService from "../services/lineService";
 
 // `/lines`
@@ -43,7 +40,6 @@ class LineController {
             }
 
             const result = await this._service.createLine(text, userId, storyId);
-
             this.sendResult(res, result);
         } catch (error) {
             next(error);
