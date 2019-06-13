@@ -3,24 +3,21 @@ import { Repository } from "typeorm";
 import BadRequestException from "../exceptions/badRequestException";
 import NotFoundException from "../exceptions/notFoundException";
 import Line from "../models/line";
+import LineService from "../services/lineService";
 
 // `/lines`
 class LineController {
 
-    private readonly _repository: Repository<Line>;
+    private readonly _service: LineService;
 
-    constructor(repository: Repository<Line>) {
-        this._repository = repository;
+    constructor(service: LineService) {
+        this._service = service;
     }
 
     // get(`/`)
     public async getAllLines(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const allLines = await this._repository.find();
-            if (!allLines || allLines.length === 0) {
-                throw new NotFoundException(`No lines found`);
-            }
-
+            const allLines = await this._service.getAllLines();
             this.sendResult(res, { lines: allLines });
         } catch (error) {
             next(error);
@@ -35,9 +32,17 @@ class LineController {
                 throw new BadRequestException(`missing text parameter`);
             }
 
-            const line = new Line();
-            line.text = text;
-            const result = await this._repository.save(line);
+            const userId = req.body.userId;
+            if (!userId) {
+                throw new BadRequestException(`missing userId parameter`);
+            }
+
+            const storyId = req.body.storyId;
+            if (!storyId) {
+                throw new BadRequestException(`missing storyId parameter`);
+            }
+
+            const result = await this._service.createLine(text, userId, storyId);
 
             this.sendResult(res, result);
         } catch (error) {
@@ -48,15 +53,7 @@ class LineController {
     // get(`/:id`)
     public async getLine(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const id = req.params.id;
-            if (!id) {
-                throw new BadRequestException(`missing id parameter`);
-            }
-
-            const line = await this._repository.findOne(id);
-            if (!line) {
-                throw new NotFoundException(`Unable to find line with id '${id}'`);
-            }
+            const line = await this._service.getLine(req.params.id);
             this.sendResult(res, line);
         } catch (error) {
             next(error);
@@ -66,15 +63,7 @@ class LineController {
     // delete(`/:id`)
     public async deleteLine(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const id = req.params.id;
-            if (!id) {
-                throw new BadRequestException(`missing id parameter`);
-            }
-
-            const line = await this._repository.delete(id);
-            if (!line) {
-                throw new NotFoundException(`Unable to find line with id '${id}'`);
-            }
+            const line = await this._service.deleteLine(req.params.id);
             this.sendResult(res, line);
         } catch (error) {
             next(error);
@@ -84,24 +73,11 @@ class LineController {
     // put(`/:id`)
     public async updateLine(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const id = req.params.id;
-            if (!id) {
-                throw new BadRequestException(`missing id parameter`);
-            }
-
-            const line = await this._repository.findOne(id);
-            if (!line) {
-                throw new NotFoundException(`Unable to find line with id '${id}'`);
-            }
-
-            const newLine = req.body;
-            if (!newLine) {
-                throw new BadRequestException(`missing request body`);
-            }
-            await this._repository.merge(line, newLine);
-            const result = await this._repository.save(line);
-
-            this.sendResult(res, result);
+            const line = await this._service.updateLine(req.params.id,
+                                                        req.params.text,
+                                                        req.params.userId,
+                                                        req.params.storyId);
+            this.sendResult(res, line);
         } catch (error) {
             next(error);
         }
@@ -112,4 +88,4 @@ class LineController {
     }
 }
 
-export default (repository: Repository<Line>) => new LineController(repository);
+export default (service: LineService) => new LineController(service);

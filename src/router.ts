@@ -4,6 +4,7 @@ import { Connection } from "typeorm";
 import ErrorHandlerController from "./controllers/errorHandlerController";
 import LineController from "./controllers/lineController";
 import Line from "./models/line";
+import LineService from "./services/lineService";
 
 const prefix: string = `api`;
 const apiVersion: string = `v1`;
@@ -30,7 +31,9 @@ export class Router {
 
     // `/${prefix}/${apiVersion}/lines`
     private static linesRoute(connection: Connection) {
-        const lineController = LineController(connection.getRepository(Line));
+        const lineRepository = connection.getRepository(Line);
+        const lineService = new LineService(lineRepository);
+        const lineController = LineController(lineService);
         const router = expressRouter();
         return router
             .get(`/`, (req, res, next) => lineController.getAllLines(req, res, next))

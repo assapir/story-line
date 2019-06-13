@@ -8,10 +8,11 @@ const env = process.env.NODE_ENV || DevlopementEnviorment;
 const config = require(__dirname + `/../config/config.json`)[env];
 const port = config.port || 80;
 
-const app = express();
-
-(async () => {
+async function startServer() {
     const connection = await createConnection();
+    const app = express();
     Router.route(app, connection);
     app.listen(port);
-})();
+}
+
+startServer();

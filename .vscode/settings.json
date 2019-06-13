@@ -2,5 +2,6 @@
     "debug.node.autoAttach": "on",
     "editor.codeActionsOnSave": {
         "source.fixAll.tslint": true
-    }
+    },
+    "cSpell.enabled": false
 }

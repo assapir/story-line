@@ -12,9 +12,17 @@ export default class Line {
     @Column({ nullable: false })
     public text: string;
 
-    @ManyToOne((type) => User, (user) => user.lines)
+    @Column({ nullable: true })
+    public userId: string;
+
+    @ManyToOne((type) => User, (user) => user.lines, { nullable: false })
+    @JoinColumn({ name: `userId` })
     public user: User;
 
-    @ManyToOne((type) => Story, (story) => story.lines)
+    @Column({ nullable: true })
+    public storyId: string;
+
+    @ManyToOne((type) => Story, (story) => story.lines, { nullable: false })
+    @JoinColumn({ name: `storyId` })
     public story: Story;
 }
