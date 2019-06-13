@@ -1,13 +1,12 @@
 language: nodejs
 node_js:
-  - 11
+  - 12
   - 10
-  - 9
-  - 8
   - node
 
 os: 
   - osx
+  - windows
   - linux
 dist: xenial  
 
