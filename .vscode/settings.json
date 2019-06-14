@@ -3,5 +3,7 @@
     "editor.codeActionsOnSave": {
         "source.fixAll.tslint": true
     },
-    "cSpell.enabled": false
+    "cSpell.words": [
+        "typeorm"
+    ]
 }
