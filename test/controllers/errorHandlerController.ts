@@ -10,7 +10,6 @@ describe(`ErrorHandlerController`, () => {
     let app: Application;
 
     describe(`NotFoundError`, () => {
-
         beforeEach(() => {
             app = express();
             ErrorHandlerController(app);
@@ -71,24 +70,38 @@ describe(`ErrorHandlerController`, () => {
     });
 
     describe(`InternalError`, () => {
-        const path = `/any/path`;
-        const message = `Very angry error message`;
+        describe(`with explicit message`, () => {
+            it(`should return 500 error with correct message`, async () => {
+                const path = `/any/path`;
+                const message = `Very angry error message`;
+                app = express();
+                setSimulateError(app, path, new Error(message));
+                ErrorHandlerController(app);
+                request = supertest(app);
+                const res = await request.get(path);
 
-        beforeEach(() => {
-            app = express();
-            setSimulateError(app, path, new Error(message));
-            ErrorHandlerController(app);
-            request = supertest(app);
+                expect(res.status).to.equal(500);
+                expect(res.type).to.equal(`application/json`);
+                expect(res.text).to.equal(JSON.stringify({
+                    error: message,
+                }));
+            });
         });
 
-        it(`should return 500 error with correct message`, async () => {
-            const res = await request.get(path);
+        describe(`with implicit message`, () => {
+            it(`should return 500 error with default message`, async () => {
+                app = express();
+                setSimulateError(app, `/any/path`, new Error());
+                ErrorHandlerController(app);
+                request = supertest(app);
+                const res = await request.get(`/any/path`);
 
-            expect(res.status).to.equal(500);
-            expect(res.type).to.equal(`application/json`);
-            expect(res.text).to.equal(JSON.stringify({
-                error: message,
-            }));
+                expect(res.status).to.equal(500);
+                expect(res.type).to.equal(`application/json`);
+                expect(res.text).to.equal(JSON.stringify({
+                    error: `InternalServerError`,
+                }));
+            });
         });
     });
 });
