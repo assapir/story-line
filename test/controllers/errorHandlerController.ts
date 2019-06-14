@@ -23,7 +23,7 @@ describe(`ErrorHandlerController`, () => {
 
                 expect(res.status).to.equal(404);
                 expect(res.type).to.equal(`application/json`);
-                expect(res.body).to.equal(JSON.stringify({
+                expect(res.text).to.equal(JSON.stringify({
                     error: `Unable to find resource /unknown/path`,
                 }));
             });
@@ -33,7 +33,7 @@ describe(`ErrorHandlerController`, () => {
 
                 expect(res.status).to.equal(404);
                 expect(res.type).to.equal(`application/json`);
-                expect(res.body).to.equal(JSON.stringify({
+                expect(res.text).to.equal(JSON.stringify({
                     error: `Unable to find resource /unknown/path`,
                 }));
             });
@@ -43,7 +43,7 @@ describe(`ErrorHandlerController`, () => {
 
                 expect(res.status).to.equal(404);
                 expect(res.type).to.equal(`application/json`);
-                expect(res.body).to.equal(JSON.stringify({
+                expect(res.text).to.equal(JSON.stringify({
                     error: `Unable to find resource /unknown/path`,
                 }));
             });
@@ -53,7 +53,7 @@ describe(`ErrorHandlerController`, () => {
 
                 expect(res.status).to.equal(404);
                 expect(res.type).to.equal(`application/json`);
-                expect(res.body).to.equal(JSON.stringify({
+                expect(res.text).to.equal(JSON.stringify({
                     error: `Unable to find resource /unknown/path`,
                 }));
             });
@@ -63,7 +63,7 @@ describe(`ErrorHandlerController`, () => {
 
                 expect(res.status).to.equal(404);
                 expect(res.type).to.equal(`application/json`);
-                expect(res.body).to.equal(JSON.stringify({
+                expect(res.text).to.equal(JSON.stringify({
                     error: `Unable to find resource /unknown/path`,
                 }));
             });
@@ -86,7 +86,7 @@ describe(`ErrorHandlerController`, () => {
 
             expect(res.status).to.equal(500);
             expect(res.type).to.equal(`application/json`);
-            expect(res.body).to.equal(JSON.stringify({
+            expect(res.text).to.equal(JSON.stringify({
                 error: message,
             }));
         });
