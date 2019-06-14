@@ -1,4 +1,4 @@
-import Exception from "./expetion";
+import Exception from "./exception";
 
 export default class NotFoundException extends Exception {
     constructor(message: string = `Not Found`) {

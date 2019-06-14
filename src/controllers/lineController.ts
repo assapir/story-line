@@ -1,5 +1,6 @@
-import { NextFunction, Request, Response } from "express";
+import { Application, NextFunction, Request, Response, Router } from "express";
 import BadRequestException from "../exceptions/badRequestException";
+import { apiVersion, prefix } from "../router";
 import LineService from "../services/lineService";
 
 // `/lines`
@@ -7,7 +8,8 @@ class LineController {
 
     private readonly _service: LineService;
 
-    constructor(service: LineService) {
+    constructor(app: Application, service: LineService) {
+        this.initializeRouter(app);
         this._service = service;
     }
 
@@ -79,9 +81,20 @@ class LineController {
         }
     }
 
+    private initializeRouter(app: Application): void {
+        const router = Router();
+        app.use(`/${prefix}/${apiVersion}/lines`, router);
+        router
+            .get(`/`,  (req, res, next) => this.getAllLines(req, res, next))
+            .get(`/:id`, (req, res, next) => this.getLine(req, res, next))
+            .post(`/`, (req, res, next) => this.createNewLine(req, res, next))
+            .delete(`/:id`, (req, res, next) => this.deleteLine(req, res, next))
+            .put(`/:id`, (req, res, next) => this.updateLine(req, res, next));
+    }
+
     private sendResult(res: Response, result: any) {
-        res.status(200).send(JSON.stringify(result));
+        res.status(200).json(result);
     }
 }
 
-export default (service: LineService) => new LineController(service);
+export default (app: Application, service: LineService) => new LineController(app, service);
