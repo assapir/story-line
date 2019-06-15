@@ -3,7 +3,7 @@ import BadRequestException from "../exceptions/badRequestException";
 import { apiVersion, prefix } from "../router";
 import LineService from "../services/lineService";
 
-// `/lines`
+// /${prefix}/${apiVersion}/lines
 class LineController {
 
     private readonly _service: LineService;
