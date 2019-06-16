@@ -181,5 +181,39 @@ describe(`LineService`, () => {
                 expect(story.lines[2].text).to.be.equal(text);
             });
         });
+
+        describe.only(`deleteLine`, () => {
+            it(`should throw if id parameter is missing`, async () => {
+                try {
+                    await service.removeLine(``);
+                    assert.fail(`the call above should throw`);
+                } catch (error) {
+                    expect(error).to.be.instanceOf(BadRequestException);
+                    expect(error.message).to.be.equal(`missing id parameter`);
+                }
+            });
+
+            it(`should throw if id parameter is not presented in DB`, async () => {
+                try {
+                    await service.removeLine(`not-real-id`);
+                    assert.fail(`the call above should throw`);
+                } catch (error) {
+                    expect(error).to.be.instanceOf(NotFoundException);
+                    expect(error.message).to.be.equal(`Unable to find line with id 'not-real-id'`);
+                }
+            });
+
+            it(`should remove the line from DB, user and story`, async () => {
+                const result = await service.removeLine(lines[0].id);
+                expect(result).to.be.instanceOf(Line);
+                expect(result.id).to.be.equal(undefined); // removed raw doesn't have id
+
+                user = await getUserById(connection, user.id);
+                expect(user.lines.length).to.be.equal(1);
+
+                story = await getStoryById(connection, story.id);
+                expect(story.lines.length).to.be.equal(1);
+            });
+        });
     });
 });

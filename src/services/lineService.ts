@@ -59,24 +59,21 @@ export default class LineService {
         }
     }
 
-    public async deleteLine(id: string): Promise<Line> {
-        try {
-            if (!id) {
-                throw new BadRequestException(`missing id parameter`);
-            }
-
-            const result = await this._repository.delete(id);
-            if (!result.raw) {
-                throw new NotFoundException(`Unable to find line with id '${id}'`);
-            }
-
-            return result.raw as Line;
-        } catch (error) {
-            if (error instanceof QueryFailedError) {
-                throw new BadRequestException(`some parameters are incorrect`);
-            }
-            throw error;
+    public async removeLine(id: string): Promise<Line> {
+        if (!id) {
+            throw new BadRequestException(`missing id parameter`);
         }
+
+        const line = await this.getLine(id);
+        if (!line) {
+            throw new NotFoundException(`Unable to find line with id '${id}'`);
+        }
+        const result = await this._repository.remove(line);
+        if (!result) {
+            throw new NotFoundException(`Unable to remove line'`);
+        }
+
+        return result;
     }
 
     public async updateLine(id: string, text: string, userId: string, storyId: string): Promise<Line> {

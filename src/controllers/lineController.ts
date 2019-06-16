@@ -61,7 +61,7 @@ class LineController {
     // delete(`/:id`)
     public async deleteLine(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const line = await this._service.deleteLine(req.params.id);
+            const line = await this._service.removeLine(req.params.id);
             this.sendResult(res, line);
         } catch (error) {
             next(error);

@@ -173,7 +173,7 @@ describe(`LineController`, () => {
 
     describe('DELETE `/:id`', () => {
         it(`should call LineService.deleteLine and return the line`, async () => {
-            lineService.deleteLine(line.id).returns(Promise.resolve(line));
+            lineService.removeLine(line.id).returns(Promise.resolve(line));
 
             const res = await request.delete(`${linePath}/${line.id}`)
                 .type(`form`);
@@ -188,7 +188,7 @@ describe(`LineController`, () => {
         });
 
         it(`should return error if error thrown in the service`, async () => {
-            lineService.deleteLine(line.id)
+            lineService.removeLine(line.id)
                 .returns(Promise.reject(new NotFoundException(`Unable to find line with id '${line.id}'`)));
 
             const res = await request.delete(`${linePath}/${line.id}`)
