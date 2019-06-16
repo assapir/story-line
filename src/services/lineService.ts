@@ -117,8 +117,9 @@ export default class LineService {
             }
 
             if (Object.keys(toUpdate).length === 0) {
-                throw new BadRequestException(`missing parameters to update`);
+                throw new BadRequestException(`no parameters to update`);
             }
+
             const result = await this._repository.update(id, toUpdate);
             if (!result.raw) {
                 throw new NotFoundException(`Unable to find line with id '${id}'`);

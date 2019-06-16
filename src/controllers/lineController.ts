@@ -72,9 +72,9 @@ class LineController {
     public async updateLine(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const line = await this._service.updateLine(req.params.id,
-                                                        req.params.text,
-                                                        req.params.userId,
-                                                        req.params.storyId);
+                                                        req.body.text,
+                                                        req.body.userId,
+                                                        req.body.storyId);
             this.sendResult(res, line);
         } catch (error) {
             next(error);

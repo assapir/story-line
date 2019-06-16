@@ -75,7 +75,8 @@ describe(`LineController`, () => {
         it(`should call LineService.getLine and return the line`, async () => {
             lineService.getLine(line.id).returns(Promise.resolve(line));
 
-            const res = await request.get(`${linePath}/${line.id}`);
+            const res = await request.get(`${linePath}/${line.id}`)
+                .type(`form`);
             expect(res.status).to.equal(200);
             expect(res.type).to.equal(`application/json`);
             expect(res.body).to.deep.equal({
@@ -87,12 +88,13 @@ describe(`LineController`, () => {
         });
 
         it(`should return error if error thrown in the service`, async () => {
-            lineService.getAllLines()
+            lineService.getLine(line.id)
                 .returns(Promise.reject(new NotFoundException(`Unable to find line with id '${line.id}'`)));
 
-            const res = await request.get(`${linePath}/`);
+            const res = await request.get(`${linePath}/${line.id}`)
+                .type(`form`);
             expect(res.status).to.equal(404);
-            expect(res.body).to.deep.equal({error: `Unable to find line with id 'someId'`});
+            expect(res.body).to.deep.equal({ error: `Unable to find line with id 'someId'` });
         });
     });
 
@@ -163,8 +165,74 @@ describe(`LineController`, () => {
         it(`should return error if error thrown in the service`, async () => {
             lineService.getAllLines().returns(Promise.reject(new BadRequestException(`missing story parameter`)));
 
-            const res = await request.get(`${linePath}/`);
+            const res = await request.get(`${linePath}/`)
+                .type(`form`);
             expect(res.status).to.equal(400);
+        });
+    });
+
+    describe('DELETE `/:id`', () => {
+        it(`should call LineService.deleteLine and return the line`, async () => {
+            lineService.deleteLine(line.id).returns(Promise.resolve(line));
+
+            const res = await request.delete(`${linePath}/${line.id}`)
+                .type(`form`);
+            expect(res.status).to.equal(200);
+            expect(res.type).to.equal(`application/json`);
+            expect(res.body).to.deep.equal({
+                id: line.id,
+                storyId: line.storyId,
+                text: line.text,
+                userId: line.userId,
+            });
+        });
+
+        it(`should return error if error thrown in the service`, async () => {
+            lineService.deleteLine(line.id)
+                .returns(Promise.reject(new NotFoundException(`Unable to find line with id '${line.id}'`)));
+
+            const res = await request.delete(`${linePath}/${line.id}`)
+                .type(`form`);
+            expect(res.status).to.equal(404);
+            expect(res.body).to.deep.equal({ error: `Unable to find line with id 'someId'` });
+        });
+    });
+
+    describe('PUT `/:id`', () => {
+        it(`should call LineService.updateLine and return the line`, async () => {
+            lineService.updateLine(line.id, line.text, line.userId, line.storyId)
+                .returns(Promise.resolve(line));
+
+            const res = await request.put(`${linePath}/${line.id}`)
+                .type(`form`)
+                .send({
+                    storyId: line.storyId,
+                    text: line.text,
+                    userId: line.userId,
+                });
+            expect(res.status).to.equal(200);
+            expect(res.type).to.equal(`application/json`);
+            expect(res.body).to.deep.equal({
+                id: line.id,
+                storyId: line.storyId,
+                text: line.text,
+                userId: line.userId,
+            });
+        });
+
+        it(`should return error if error thrown in the service`, async () => {
+            lineService.updateLine(line.id, line.text, line.userId, line.storyId)
+                .returns(Promise.reject(new BadRequestException(`no parameters to update`)));
+
+            const res = await request.put(`${linePath}/${line.id}`)
+                .type(`form`)
+                .send({
+                    storyId: line.storyId,
+                    text: line.text,
+                    userId: line.userId,
+                });
+            expect(res.status).to.equal(400);
+            expect(res.body).to.deep.equal({ error: `no parameters to update` });
         });
     });
 });
