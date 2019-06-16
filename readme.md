@@ -10,7 +10,7 @@
   * Currently using Sqlite3.
 
 ## Tests
-* Every testable class under `src/` should have a co-responding test suit in `test/`.
+* Every testable class under `src/` should have a corresponding test suit file in `test/`.
 * run `npm run test` to run all the tests with coverage information.
 * CI (Travis) should run `npm run test:ci` for sending coverage data to [coveralls.io](https://coveralls.io/github/meijin007/story-line).
 
