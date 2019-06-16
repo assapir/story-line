@@ -10,23 +10,16 @@ export default class LineService {
     }
 
     public async getLine(id: string): Promise<Line> {
-        try {
-            if (!id) {
-                throw new BadRequestException(`missing id parameter`);
-            }
-
-            const line = await this._repository.findOne(id);
-            if (!line) {
-                throw new NotFoundException(`Unable to find line with id '${id}'`);
-            }
-
-            return line;
-        } catch (error) {
-            if (error instanceof QueryFailedError) {
-                throw new BadRequestException(`some parameters are incorrect`);
-            }
-            throw error;
+        if (!id) {
+            throw new BadRequestException(`missing id parameter`);
         }
+
+        const line = await this._repository.findOne(id);
+        if (!line) {
+            throw new NotFoundException(`Unable to find line with id '${id}'`);
+        }
+
+        return line;
     }
 
     public async getAllLines(): Promise<Line[]> {
@@ -45,11 +38,11 @@ export default class LineService {
             }
 
             if (!userId) {
-                throw new BadRequestException(`missing user parameter`);
+                throw new BadRequestException(`missing userId parameter`);
             }
 
             if (!storyId) {
-                throw new BadRequestException(`missing story parameter`);
+                throw new BadRequestException(`missing storyId parameter`);
             }
 
             const line = new Line();

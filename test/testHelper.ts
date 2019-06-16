@@ -10,6 +10,16 @@ export function setSimulateError(app: Application, path: string, error: Error) {
     });
 }
 
+export async function getUserById(connection: Connection, id: string): Promise<User> {
+    const userRepository = connection.getRepository(User);
+    return await userRepository.findOneOrFail(id);
+}
+
+export async function getStoryById(connection: Connection, id: string): Promise<Story> {
+    const userRepository = connection.getRepository(Story);
+    return await userRepository.findOneOrFail(id);
+}
+
 export async function seedDatabase(connection: Connection): Promise<[User, Story, Line[]]> {
     const queryRunner = connection.createQueryRunner();
     await connection.synchronize(true); // reset it

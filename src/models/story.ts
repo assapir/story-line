@@ -10,7 +10,6 @@ export default class Story {
     public name: string;
 
     @OneToMany((type) => Line, (line) => line.story, {
-        cascade: true,
         eager: true,
       })
     public lines: Line[];

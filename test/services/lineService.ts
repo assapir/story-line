@@ -1,12 +1,13 @@
 import { assert, expect } from "chai";
 import { before, beforeEach, describe, it } from "mocha";
 import { Connection, createConnection, Repository } from "typeorm";
+import BadRequestException from "../../src/exceptions/badRequestException";
 import NotFoundException from "../../src/exceptions/notFoundException";
 import Line from "../../src/models/line";
 import Story from "../../src/models/story";
 import User from "../../src/models/user";
 import LineService from "../../src/services/lineService";
-import { seedDatabase } from "../testHelper";
+import { getStoryById, getUserById, seedDatabase } from "../testHelper";
 
 describe(`LineService`, () => {
     let connection: Connection;
@@ -34,6 +35,18 @@ describe(`LineService`, () => {
                 } catch (error) {
                     expect(error).to.be.instanceOf(NotFoundException);
                     expect(error.message).to.equal(`No lines found`);
+                }
+            });
+        });
+
+        describe(`getLine`, () => {
+            it(`should throw NotFoundException`, async () => {
+                try {
+                    await service.getLine(`not existing Id`);
+                    assert.fail(`the call above should throw`);
+                } catch (error) {
+                    expect(error).to.be.instanceOf(NotFoundException);
+                    expect(error.message).to.equal(`Unable to find line with id 'not existing Id'`);
                 }
             });
         });
@@ -67,6 +80,105 @@ describe(`LineService`, () => {
                 expect(secondLine.text).to.deep.equal(lines[1].text);
                 expect(secondLine.userId).to.deep.equal(user.id);
                 expect(secondLine.storyId).to.deep.equal(story.id);
+            });
+        });
+
+        describe(`getLine`, () => {
+            it(`should throw if the 'id' parameter wasn't supplied`, async () => {
+                try {
+                    await service.getLine(``);
+                    assert.fail(`the call above should throw`);
+                } catch (error) {
+                    expect(error).to.be.instanceOf(BadRequestException);
+                    expect(error.message).to.be.equal(`missing id parameter`);
+                }
+            });
+
+            it(`should throw if id is not in the DB`, async () => {
+                try {
+                    await service.getLine(`not-in-db-id`);
+                    assert.fail(`the call above should throw`);
+                } catch (error) {
+                    expect(error).to.be.instanceOf(NotFoundException);
+                    expect(error.message).to.be.equal(`Unable to find line with id 'not-in-db-id'`);
+                }
+            });
+
+            it(`should return the correct line matching id parameter`, async () => {
+                const result = await service.getLine(lines[1].id);
+                expect(result).to.be.instanceOf(Line);
+                expect(result.id).to.deep.equal(lines[1].id);
+                expect(result.text).to.deep.equal(lines[1].text);
+                expect(result.userId).to.deep.equal(user.id);
+                expect(result.storyId).to.deep.equal(story.id);
+            });
+        });
+
+        describe(`createLine`, () => {
+            it(`should throw if text parameter is missing`, async () => {
+                try {
+                    await service.createLine(``, user.id, story.id);
+                    assert.fail(`the call above should throw`);
+                } catch (error) {
+                    expect(error).to.be.instanceOf(BadRequestException);
+                    expect(error.message).to.be.equal(`missing text parameter`);
+                }
+            });
+
+            it(`should throw if userId parameter is missing`, async () => {
+                try {
+                    await service.createLine(`some very nice text`, ``, story.id);
+                    assert.fail(`the call above should throw`);
+                } catch (error) {
+                    expect(error).to.be.instanceOf(BadRequestException);
+                    expect(error.message).to.be.equal(`missing userId parameter`);
+                }
+            });
+
+            it(`should throw if storyId parameter is missing`, async () => {
+                try {
+                    await service.createLine(`some very nice text`, user.id, ``);
+                    assert.fail(`the call above should throw`);
+                } catch (error) {
+                    expect(error).to.be.instanceOf(BadRequestException);
+                    expect(error.message).to.be.equal(`missing storyId parameter`);
+                }
+            });
+
+            it(`should throw if userId parameter is not exist in DB`, async () => {
+                try {
+                    await service.createLine(`some very nice text`, `not-real-user-id`, story.id);
+                    assert.fail(`the call above should throw`);
+                } catch (error) {
+                    expect(error).to.be.instanceOf(BadRequestException);
+                    expect(error.message).to.be.equal(`some parameters are incorrect`);
+                }
+            });
+
+            it(`should throw if storyId parameter is not exist in DB`, async () => {
+                try {
+                    await service.createLine(`some very nice text`, user.id, `not-real-story-id`);
+                    assert.fail(`the call above should throw`);
+                } catch (error) {
+                    expect(error).to.be.instanceOf(BadRequestException);
+                    expect(error.message).to.be.equal(`some parameters are incorrect`);
+                }
+            });
+
+            it(`should save the passed text to the correct user and story`, async () => {
+                const text = `very important text`;
+                const result = await service.createLine(text, user.id, story.id);
+                expect(result).to.be.instanceOf(Line);
+                expect(result.storyId).to.equal(story.id);
+                expect(result.userId).to.equal(user.id);
+
+                user = await getUserById(connection, user.id);
+                expect(user.lines.length).to.be.equal(3);
+                expect(user.lines[2].text).to.be.equal(text);
+
+                story = await getStoryById(connection, story.id);
+                expect(story.lines.length).to.be.equal(3);
+                expect(story.lines[2].text).to.be.equal(text);
             });
         });
     });

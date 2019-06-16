@@ -16,6 +16,8 @@ export default class User {
     @Column({ nullable: false })
     public email: string;
 
-    @OneToMany((type) => Line, (line) => line.user)
+    @OneToMany((type) => Line, (line) => line.user, {
+        eager: true,
+    })
     public lines: Line[];
 }
