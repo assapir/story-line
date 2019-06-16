@@ -24,27 +24,18 @@ export default class LineService {
         } catch (error) {
             if (error instanceof QueryFailedError) {
                 throw new BadRequestException(`some parameters are incorrect`);
-            } else {
-                throw error;
             }
+            throw error;
         }
     }
 
     public async getAllLines(): Promise<Line[]> {
-        try {
-            const allLines = await this._repository.find();
-            if (!allLines || allLines.length === 0) {
-                throw new NotFoundException(`No lines found`);
-            }
-
-            return allLines;
-        } catch (error) {
-            if (error instanceof QueryFailedError) {
-                throw new BadRequestException(`some parameters are incorrect`);
-            } else {
-                throw error;
-            }
+        const allLines = await this._repository.find();
+        if (!allLines || allLines.length === 0) {
+            throw new NotFoundException(`No lines found`);
         }
+
+        return allLines;
     }
 
     public async createLine(text: string, userId: string, storyId: string): Promise<Line> {
@@ -70,9 +61,8 @@ export default class LineService {
         } catch (error) {
             if (error instanceof QueryFailedError) {
                 throw new BadRequestException(`some parameters are incorrect`);
-            } else {
-                throw error;
             }
+            throw error;
         }
     }
 
@@ -91,9 +81,8 @@ export default class LineService {
         } catch (error) {
             if (error instanceof QueryFailedError) {
                 throw new BadRequestException(`some parameters are incorrect`);
-            } else {
-                throw error;
             }
+            throw error;
         }
     }
 
@@ -129,9 +118,8 @@ export default class LineService {
         } catch (error) {
             if (error instanceof QueryFailedError) {
                 throw new BadRequestException(`some parameters are incorrect`);
-            } else {
-                throw error;
             }
+            throw error;
         }
     }
 }
