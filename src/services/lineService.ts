@@ -64,52 +64,40 @@ export default class LineService {
             throw new BadRequestException(`missing id parameter`);
         }
 
-        const line = await this.getLine(id);
+        const line = await this._repository.findOne(id);
         if (!line) {
             throw new NotFoundException(`Unable to find line with id '${id}'`);
         }
         const result = await this._repository.remove(line);
-        if (!result) {
-            throw new NotFoundException(`Unable to remove line'`);
-        }
-
         return result;
     }
 
     public async updateLine(id: string, text: string, userId: string, storyId: string): Promise<Line> {
-        try {
-            if (!id) {
-                throw new BadRequestException(`missing id parameter`);
-            }
-
-            const toUpdate = {};
-            if (text) {
-                toUpdate[`text`] = text;
-            }
-
-            if (userId) {
-                toUpdate[`userId`] = userId;
-            }
-
-            if (storyId) {
-                toUpdate[`storyId`] = storyId;
-            }
-
-            if (Object.keys(toUpdate).length === 0) {
-                throw new BadRequestException(`no parameters to update`);
-            }
-
-            const result = await this._repository.update(id, toUpdate);
-            if (!result.raw) {
-                throw new NotFoundException(`Unable to find line with id '${id}'`);
-            }
-
-            return result.raw as Line;
-        } catch (error) {
-            if (error instanceof QueryFailedError) {
-                throw new BadRequestException(`some parameters are incorrect`);
-            }
-            throw error;
+        if (!id) {
+            throw new BadRequestException(`missing id parameter`);
         }
+
+        if (!text && !userId && !storyId) {
+            throw new BadRequestException(`no parameters to update`);
+        }
+
+        const line = await this._repository.findOne(id);
+        if (!line) {
+            throw new NotFoundException(`Unable to find line with id '${id}'`);
+        }
+        if (text) {
+            line.text = text;
+        }
+
+        if (userId) {
+            line.userId = userId;
+        }
+
+        if (storyId) {
+            line.storyId = storyId;
+        }
+
+        const result = await this._repository.save(line);
+        return result;
     }
 }

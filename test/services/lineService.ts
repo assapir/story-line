@@ -1,4 +1,5 @@
 import { assert, expect } from "chai";
+import faker from "faker";
 import { before, beforeEach, describe, it } from "mocha";
 import { Connection, createConnection, Repository } from "typeorm";
 import BadRequestException from "../../src/exceptions/badRequestException";
@@ -7,7 +8,7 @@ import Line from "../../src/models/line";
 import Story from "../../src/models/story";
 import User from "../../src/models/user";
 import LineService from "../../src/services/lineService";
-import { getStoryById, getUserById, seedDatabase } from "../testHelper";
+import { getStoryById, getUserById, seedDatabase, seedStory, seedUser } from "../testHelper";
 
 describe(`LineService`, () => {
     let connection: Connection;
@@ -182,7 +183,7 @@ describe(`LineService`, () => {
             });
         });
 
-        describe(`deleteLine`, () => {
+        describe(`removeLine`, () => {
             it(`should throw if id parameter is missing`, async () => {
                 try {
                     await service.removeLine(``);
@@ -213,6 +214,105 @@ describe(`LineService`, () => {
 
                 story = await getStoryById(connection, story.id);
                 expect(story.lines.length).to.be.equal(1);
+            });
+        });
+
+        describe(`updateLine`, () => {
+            it(`should throw if id parameter is missing`, async () => {
+                try {
+                    await service.updateLine(``, `nice text`, user.id, story.id);
+                    assert.fail(`the call above should throw`);
+                } catch (error) {
+                    expect(error).to.be.instanceOf(BadRequestException);
+                    expect(error.message).to.be.equal(`missing id parameter`);
+                }
+            });
+
+            it(`should throw if id parameter is not presented in DB`, async () => {
+                try {
+                    await service.updateLine(`not-real-id`, `nice text`, user.id, story.id);
+                    assert.fail(`the call above should throw`);
+                } catch (error) {
+                    expect(error).to.be.instanceOf(NotFoundException);
+                    expect(error.message).to.be.equal(`Unable to find line with id 'not-real-id'`);
+                }
+            });
+
+            it(`should throw if text, storyId or userId parameters are missing`, async () => {
+                try {
+                    await service.updateLine(lines[0].id, ``, ``, ``);
+                    assert.fail(`the call above should throw`);
+                } catch (error) {
+                    expect(error).to.be.instanceOf(BadRequestException);
+                    expect(error.message).to.be.equal(`no parameters to update`);
+                }
+            });
+
+            it(`should update text if only text was passed`, async () => {
+                const result = await service.updateLine(lines[0].id, `nice text`, ``, ``);
+                expect(result).to.be.instanceOf(Line);
+                expect(result.id).to.equal(lines[0].id);
+                expect(result.text).to.not.equal(lines[0].text);
+                expect(result.text).to.equal(`nice text`);
+                expect(result.storyId).to.equal(story.id);
+                expect(result.userId).to.equal(user.id);
+            });
+
+            it(`should update userId if only userId was passed`, async () => {
+                let user1 = await seedUser(connection.createQueryRunner());
+
+                const result = await service.updateLine(lines[0].id, ``, user1.id, ``);
+                expect(result).to.be.instanceOf(Line);
+                expect(result.id).to.equal(lines[0].id);
+                expect(result.userId).to.equal(user1.id);
+                expect(result.storyId).to.equal(story.id);
+
+                user = await getUserById(connection, user.id);
+                expect(user.lines.length).to.be.equal(1);
+                user1 = await getUserById(connection, user1.id);
+                expect(user1.lines.length).to.be.equal(1);
+                expect(user1.lines[0].id).to.equal(lines[0].id);
+            });
+
+            it(`should update storyId if only storyId was passed`, async () => {
+                let story1 = await seedStory(connection.createQueryRunner());
+
+                const result = await service.updateLine(lines[0].id, ``, ``, story1.id);
+                expect(result).to.be.instanceOf(Line);
+                expect(result.id).to.equal(lines[0].id);
+                expect(result.userId).to.equal(user.id);
+                expect(result.storyId).to.equal(story1.id);
+
+                story = await getStoryById(connection, story.id);
+                expect(story.lines.length).to.be.equal(1);
+                story1 = await getStoryById(connection, story1.id);
+                expect(story1.lines.length).to.be.equal(1);
+                expect(story1.lines[0].id).to.equal(lines[0].id);
+            });
+
+            it(`should update everything if everything was passed`, async () => {
+                const queryRunner = connection.createQueryRunner();
+                let story1 = await seedStory(queryRunner);
+                let user1 = await seedUser(queryRunner);
+                const text = faker.lorem.sentence(7);
+
+                const result = await service.updateLine(lines[0].id, text, user1.id, story1.id);
+                expect(result).to.be.instanceOf(Line);
+                expect(result.id).to.equal(lines[0].id);
+                expect(result.userId).to.equal(user1.id);
+                expect(result.storyId).to.equal(story1.id);
+
+                story = await getStoryById(connection, story.id);
+                expect(story.lines.length).to.be.equal(1);
+                story1 = await getStoryById(connection, story1.id);
+                expect(story1.lines.length).to.be.equal(1);
+                expect(story1.lines[0].id).to.equal(lines[0].id);
+
+                user = await getUserById(connection, user.id);
+                expect(user.lines.length).to.be.equal(1);
+                user1 = await getUserById(connection, user1.id);
+                expect(user1.lines.length).to.be.equal(1);
+                expect(user1.lines[0].id).to.equal(lines[0].id);
             });
         });
     });
