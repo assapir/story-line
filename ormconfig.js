@@ -5,7 +5,7 @@ module.exports = {
     "type": config.dialect,
     "name": "default",
     "database": config.storage,
-    "logging": true,
+    "logging": config.logging || false,
     "synchronize": false,
     "migrationsRun": true,
     "entities": [

@@ -3,7 +3,7 @@ import express, { Application } from "express";
 import { beforeEach, describe, it } from "mocha";
 import supertest from "supertest";
 import ErrorHandlerController from "../../src/controllers/errorHandlerController";
-import { setSimulateError } from "./testHelper";
+import { setSimulateError } from "../testHelper";
 
 describe(`ErrorHandlerController`, () => {
     let request: supertest.SuperTest<supertest.Test>;

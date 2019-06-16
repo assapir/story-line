@@ -2,11 +2,12 @@
   "development": {
     "dialect": "sqlite",
     "storage": "./database.sqlite3",
+    "logging": true,
     "port": 3000
   },
   "test": {
     "dialect": "sqlite",
-    "storage": ":memory",
+    "storage": ":memory:",
     "port": 3000
   },
   "production": {
