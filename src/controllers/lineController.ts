@@ -1,6 +1,6 @@
 import { Application, NextFunction, Request, Response, Router } from "express";
+import { linePath } from "../consts";
 import BadRequestException from "../exceptions/badRequestException";
-import { apiVersion, prefix } from "../router";
 import LineService from "../services/lineService";
 
 // /${prefix}/${apiVersion}/lines
@@ -83,7 +83,7 @@ class LineController {
 
     private initializeRouter(app: Application): void {
         const router = Router();
-        app.use(`/${prefix}/${apiVersion}/lines`, router);
+        app.use(linePath, router);
         router
             .get(`/`,  (req, res, next) => this.getAllLines(req, res, next))
             .get(`/:id`, (req, res, next) => this.getLine(req, res, next))

@@ -6,9 +6,6 @@ import LineController from "./controllers/lineController";
 import Line from "./models/line";
 import LineService from "./services/lineService";
 
-export const prefix: string = `api`;
-export const apiVersion: string = `v1`;
-
 export class Router {
     public static route(app: Application, connection: Connection): void {
         if (!app) {
