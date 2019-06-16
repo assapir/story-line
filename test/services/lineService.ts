@@ -182,7 +182,7 @@ describe(`LineService`, () => {
             });
         });
 
-        describe.only(`deleteLine`, () => {
+        describe(`deleteLine`, () => {
             it(`should throw if id parameter is missing`, async () => {
                 try {
                     await service.removeLine(``);
