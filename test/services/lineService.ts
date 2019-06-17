@@ -1,6 +1,6 @@
 import { assert, expect } from "chai";
 import faker from "faker";
-import { before, beforeEach, describe, it } from "mocha";
+import { after, before, beforeEach, describe, it } from "mocha";
 import { Connection, createConnection, Repository } from "typeorm";
 import BadRequestException from "../../src/exceptions/badRequestException";
 import NotFoundException from "../../src/exceptions/notFoundException";
@@ -19,8 +19,14 @@ describe(`LineService`, () => {
         process.env.NODE_ENV = `test`; // for using test in memory DB
     });
 
+    after(async () => {
+        if (connection && connection.isConnected) {
+            await connection.close();
+        }
+    });
+
     beforeEach(async () => {
-        if (!connection) {
+        if (!connection || !connection.isConnected) {
             connection = await createConnection();
         }
         repository = connection.getRepository(Line);
@@ -74,18 +80,18 @@ describe(`LineService`, () => {
 
         describe(`getAllLines`, () => {
             it(`should return all lines in the database`, async () => {
-                const res = await service.getAllLines();
-                expect(res).to.be.instanceOf(Array);
-                expect(res.length).to.equal(2);
+                const result = await service.getAllLines();
+                expect(result).to.be.instanceOf(Array);
+                expect(result.length).to.equal(2);
 
-                const firstLine = res[0];
+                const firstLine = result[0];
                 expect(firstLine).to.be.instanceof(Line);
                 expect(firstLine.id).to.deep.equal(lines[0].id);
                 expect(firstLine.text).to.deep.equal(lines[0].text);
                 expect(firstLine.userId).to.deep.equal(user.id);
                 expect(firstLine.storyId).to.deep.equal(story.id);
 
-                const secondLine = res[1];
+                const secondLine = result[1];
                 expect(secondLine).to.be.instanceof(Line);
                 expect(secondLine.id).to.deep.equal(lines[1].id);
                 expect(secondLine.text).to.deep.equal(lines[1].text);

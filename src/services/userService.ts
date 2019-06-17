@@ -28,7 +28,7 @@ export default class UserService {
     public async getAllUsers(): Promise<User[]> {
         const users = await this._repository.find();
         if (!users || users.length === 0) {
-            throw new NotFoundException(`No users found'`);
+            throw new NotFoundException(`No users found`);
         }
 
         return users;
@@ -47,18 +47,20 @@ export default class UserService {
             throw new BadRequestException(`missing email parameter`);
         }
 
-        // if the email already presented, just return the user
-        let user = await this._repository.findOne({ where: { email } });
-        if (user) {
-            throw new EntityConflictException(`user with that email already exist`);
-        }
+        try {
+            const user = new User();
+            user.firstName = firstName;
+            user.lastName = lastName;
+            user.email = email;
+            const result = await this._repository.save(user);
+            return result;
+        } catch (error) {
+            if (error instanceof QueryFailedError) {
+                throw new EntityConflictException(`user with that email already exist`);
+            }
 
-        user = new User();
-        user.firstName = firstName;
-        user.lastName = lastName;
-        user.email = email;
-        const result = await this._repository.save(user);
-        return result;
+            throw error;
+        }
     }
 
     public async removeUser(id: string): Promise<User> {
