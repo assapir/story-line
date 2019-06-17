@@ -1,4 +1,5 @@
 import { assert, expect } from "chai";
+import faker from "faker";
 import { after, before, beforeEach, describe, it } from "mocha";
 import { Connection, createConnection, Repository } from "typeorm";
 import BadRequestException from "../../src/exceptions/badRequestException";
@@ -173,6 +174,29 @@ describe(`UserService`, () => {
                     expect(error).to.be.instanceOf(EntityConflictException);
                     expect(error.message).to.be.equal(`user with that email already exist`);
                 }
+            });
+
+            it(`should throw if the email isn't valid email`, async () => {
+                try {
+                    await service.createUser(`niceName`, `nice second name`, `not-an-email`);
+                    assert.fail(`the call above should throw`);
+                } catch (error) {
+                    expect(error).to.be.instanceOf(BadRequestException);
+                    expect(error.message).to.be.equal(`validation errors: illegal email`);
+                }
+            });
+
+            it(`should create a new user in the db DB`, async () => {
+                const firstName = faker.name.firstName();
+                const lastName = faker.name.lastName();
+                const email = faker.internet.email(firstName, lastName);
+                const result = await service.createUser(firstName,
+                                                        lastName,
+                                                        email);
+                expect(result).to.be.instanceOf(User);
+                expect(result.firstName).to.equal(firstName);
+                expect(result.lastName).to.equal(lastName);
+                expect(result.email).to.equal(email);
             });
         });
     });

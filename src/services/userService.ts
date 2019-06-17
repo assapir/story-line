@@ -1,3 +1,4 @@
+import { validate } from "class-validator";
 import { QueryFailedError, Repository } from "typeorm";
 import BadRequestException from "../exceptions/badRequestException";
 import EntityConflictException from "../exceptions/entityConflictException";
@@ -52,6 +53,10 @@ export default class UserService {
             user.firstName = firstName;
             user.lastName = lastName;
             user.email = email;
+            const errors = await validate(user);
+            if (errors.length > 0) {
+                throw new BadRequestException(`validation errors: illegal email`);
+            }
             const result = await this._repository.save(user);
             return result;
         } catch (error) {
