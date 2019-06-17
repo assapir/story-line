@@ -1,7 +1,8 @@
+import HttpStatus from "http-status-codes";
 import Exception from "./exception";
 
 export default class NotFoundException extends Exception {
     constructor(message: string = `Not Found`) {
-        super(404, message, `NotFoundException`);
+        super(HttpStatus.NOT_FOUND, message, `NotFoundException`);
     }
 }

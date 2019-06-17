@@ -5,4 +5,5 @@ export const config = require(__dirname + `/../config/config.json`)[env];
 export const prefix: string = `api`;
 export const apiVersion: string = `v1`;
 
-export const linePath: string = `/${prefix}/${apiVersion}/lines`;
+export const linesPath: string = `/${prefix}/${apiVersion}/lines`;
+export const usersPath: string = `/${prefix}/${apiVersion}/users`;

@@ -50,6 +50,16 @@ describe(`LineService`, () => {
                     expect(error.message).to.equal(`Unable to find line with id 'not existing Id'`);
                 }
             });
+
+            it(`should throw NotFoundException with relations`, async () => {
+                try {
+                    await service.getLine(`not existing Id`, true);
+                    assert.fail(`the call above should throw`);
+                } catch (error) {
+                    expect(error).to.be.instanceOf(NotFoundException);
+                    expect(error.message).to.equal(`Unable to find line with id 'not existing Id'`);
+                }
+            });
         });
     });
 
@@ -112,6 +122,21 @@ describe(`LineService`, () => {
                 expect(result.text).to.deep.equal(lines[1].text);
                 expect(result.userId).to.deep.equal(user.id);
                 expect(result.storyId).to.deep.equal(story.id);
+                // tslint:disable-next-line: no-unused-expression
+                expect(result.story).to.be.undefined;
+                // tslint:disable-next-line: no-unused-expression
+                expect(result.user).to.be.undefined;
+            });
+
+            it(`should return the correct line matching id parameter with all relations`, async () => {
+                const result = await service.getLine(lines[1].id, true);
+                expect(result).to.be.instanceOf(Line);
+                expect(result.id).to.deep.equal(lines[1].id);
+                expect(result.text).to.deep.equal(lines[1].text);
+                expect(result.userId).to.deep.equal(user.id);
+                expect(result.storyId).to.deep.equal(story.id);
+                expect(result.story).not.to.be.a(`Story`);
+                expect(result.user).not.to.be.a(`User`);
             });
         });
 
