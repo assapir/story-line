@@ -1,4 +1,3 @@
-import { IsEmail } from "class-validator"
 import { Column, Entity, Index, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import Line from "./line";
 
@@ -15,7 +14,6 @@ export default class User {
 
     @Index({ unique: true })
     @Column({ nullable: false })
-    @IsEmail()
     public email: string;
 
     @OneToMany((type) => Line, (line) => line.user, {

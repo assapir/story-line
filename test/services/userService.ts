@@ -182,7 +182,7 @@ describe(`UserService`, () => {
                     assert.fail(`the call above should throw`);
                 } catch (error) {
                     expect(error).to.be.instanceOf(BadRequestException);
-                    expect(error.message).to.be.equal(`validation errors: illegal email`);
+                    expect(error.message).to.be.equal(`validation errors: illegal email 'not-an-email'`);
                 }
             });
 
