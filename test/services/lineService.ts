@@ -8,7 +8,7 @@ import Line from "../../src/models/line";
 import Story from "../../src/models/story";
 import User from "../../src/models/user";
 import LineService from "../../src/services/lineService";
-import { getStoryById, getUserById, seedDatabase, seedStory, seedUser } from "../testHelper";
+import { failIfReached, getStoryById, getUserById, seedDatabase, seedStory, seedUser } from "../testHelper";
 
 describe(`LineService`, () => {
     let connection: Connection;
@@ -38,7 +38,7 @@ describe(`LineService`, () => {
             it(`should throw NotFoundException`, async () => {
                 try {
                     await service.getAllLines();
-                    assert.fail(`the call above should throw`);
+                    failIfReached();
                 } catch (error) {
                     expect(error).to.be.instanceOf(NotFoundException);
                     expect(error.message).to.equal(`No lines found`);
@@ -50,7 +50,7 @@ describe(`LineService`, () => {
             it(`should throw NotFoundException`, async () => {
                 try {
                     await service.getLine(`not existing Id`);
-                    assert.fail(`the call above should throw`);
+                    failIfReached();
                 } catch (error) {
                     expect(error).to.be.instanceOf(NotFoundException);
                     expect(error.message).to.equal(`Unable to find line with id 'not existing Id'`);
@@ -60,7 +60,7 @@ describe(`LineService`, () => {
             it(`should throw NotFoundException with relations`, async () => {
                 try {
                     await service.getLine(`not existing Id`, true);
-                    assert.fail(`the call above should throw`);
+                    failIfReached();
                 } catch (error) {
                     expect(error).to.be.instanceOf(NotFoundException);
                     expect(error.message).to.equal(`Unable to find line with id 'not existing Id'`);
@@ -104,7 +104,7 @@ describe(`LineService`, () => {
             it(`should throw if the 'id' parameter wasn't supplied`, async () => {
                 try {
                     await service.getLine(``);
-                    assert.fail(`the call above should throw`);
+                    failIfReached();
                 } catch (error) {
                     expect(error).to.be.instanceOf(BadRequestException);
                     expect(error.message).to.be.equal(`missing id parameter`);
@@ -114,7 +114,7 @@ describe(`LineService`, () => {
             it(`should throw if id is not in the DB`, async () => {
                 try {
                     await service.getLine(`not-in-db-id`);
-                    assert.fail(`the call above should throw`);
+                    failIfReached();
                 } catch (error) {
                     expect(error).to.be.instanceOf(NotFoundException);
                     expect(error.message).to.be.equal(`Unable to find line with id 'not-in-db-id'`);
@@ -150,7 +150,7 @@ describe(`LineService`, () => {
             it(`should throw if text parameter is missing`, async () => {
                 try {
                     await service.createLine(``, user.id, story.id);
-                    assert.fail(`the call above should throw`);
+                    failIfReached();
                 } catch (error) {
                     expect(error).to.be.instanceOf(BadRequestException);
                     expect(error.message).to.be.equal(`missing text parameter`);
@@ -160,7 +160,7 @@ describe(`LineService`, () => {
             it(`should throw if userId parameter is missing`, async () => {
                 try {
                     await service.createLine(`some very nice text`, ``, story.id);
-                    assert.fail(`the call above should throw`);
+                    failIfReached();
                 } catch (error) {
                     expect(error).to.be.instanceOf(BadRequestException);
                     expect(error.message).to.be.equal(`missing userId parameter`);
@@ -170,7 +170,7 @@ describe(`LineService`, () => {
             it(`should throw if storyId parameter is missing`, async () => {
                 try {
                     await service.createLine(`some very nice text`, user.id, ``);
-                    assert.fail(`the call above should throw`);
+                    failIfReached();
                 } catch (error) {
                     expect(error).to.be.instanceOf(BadRequestException);
                     expect(error.message).to.be.equal(`missing storyId parameter`);
@@ -180,7 +180,7 @@ describe(`LineService`, () => {
             it(`should throw if userId parameter is not exist in DB`, async () => {
                 try {
                     await service.createLine(`some very nice text`, `not-real-user-id`, story.id);
-                    assert.fail(`the call above should throw`);
+                    failIfReached();
                 } catch (error) {
                     expect(error).to.be.instanceOf(BadRequestException);
                     expect(error.message).to.be.equal(`some parameters are incorrect`);
@@ -190,7 +190,7 @@ describe(`LineService`, () => {
             it(`should throw if storyId parameter is not exist in DB`, async () => {
                 try {
                     await service.createLine(`some very nice text`, user.id, `not-real-story-id`);
-                    assert.fail(`the call above should throw`);
+                    failIfReached();
                 } catch (error) {
                     expect(error).to.be.instanceOf(BadRequestException);
                     expect(error.message).to.be.equal(`some parameters are incorrect`);
@@ -218,7 +218,7 @@ describe(`LineService`, () => {
             it(`should throw if id parameter is missing`, async () => {
                 try {
                     await service.removeLine(``);
-                    assert.fail(`the call above should throw`);
+                    failIfReached();
                 } catch (error) {
                     expect(error).to.be.instanceOf(BadRequestException);
                     expect(error.message).to.be.equal(`missing id parameter`);
@@ -228,7 +228,7 @@ describe(`LineService`, () => {
             it(`should throw if id parameter is not presented in DB`, async () => {
                 try {
                     await service.removeLine(`not-real-id`);
-                    assert.fail(`the call above should throw`);
+                    failIfReached();
                 } catch (error) {
                     expect(error).to.be.instanceOf(NotFoundException);
                     expect(error.message).to.be.equal(`Unable to find line with id 'not-real-id'`);
@@ -252,7 +252,7 @@ describe(`LineService`, () => {
             it(`should throw if id parameter is missing`, async () => {
                 try {
                     await service.updateLine(``, `nice text`, user.id, story.id);
-                    assert.fail(`the call above should throw`);
+                    failIfReached();
                 } catch (error) {
                     expect(error).to.be.instanceOf(BadRequestException);
                     expect(error.message).to.be.equal(`missing id parameter`);
@@ -262,7 +262,7 @@ describe(`LineService`, () => {
             it(`should throw if id parameter is not presented in DB`, async () => {
                 try {
                     await service.updateLine(`not-real-id`, `nice text`, user.id, story.id);
-                    assert.fail(`the call above should throw`);
+                    failIfReached();
                 } catch (error) {
                     expect(error).to.be.instanceOf(NotFoundException);
                     expect(error.message).to.be.equal(`Unable to find line with id 'not-real-id'`);
@@ -272,7 +272,7 @@ describe(`LineService`, () => {
             it(`should throw if text, storyId or userId parameters are missing`, async () => {
                 try {
                     await service.updateLine(lines[0].id, ``, ``, ``);
-                    assert.fail(`the call above should throw`);
+                    failIfReached();
                 } catch (error) {
                     expect(error).to.be.instanceOf(BadRequestException);
                     expect(error.message).to.be.equal(`no parameters to update`);

@@ -37,23 +37,23 @@ export default class UserService {
     }
 
     public async createUser(firstName: string, lastName: string, email: string): Promise<User> {
-        if (!firstName) {
-            throw new BadRequestException(`missing firstName parameter`);
-        }
-
-        if (!lastName) {
-            throw new BadRequestException(`missing lastName parameter`);
-        }
-
-        if (!email) {
-            throw new BadRequestException(`missing email parameter`);
-        }
-        const isEmail = await validator.isEmail(email);
-        if (!isEmail) {
-            throw new BadRequestException(`validation errors: illegal email '${email}'`);
-        }
-
         try {
+            if (!firstName) {
+                throw new BadRequestException(`missing firstName parameter`);
+            }
+
+            if (!lastName) {
+                throw new BadRequestException(`missing lastName parameter`);
+            }
+
+            if (!email) {
+                throw new BadRequestException(`missing email parameter`);
+            }
+            const isEmail = await validator.isEmail(email);
+            if (!isEmail) {
+                throw new BadRequestException(`validation errors: illegal email '${email}'`);
+            }
+
             const user = new User();
             user.firstName = firstName;
             user.lastName = lastName;
@@ -70,14 +70,14 @@ export default class UserService {
     }
 
     public async removeUser(id: string): Promise<User> {
-        if (!id) {
-            throw new BadRequestException(`missing id parameter`);
-        }
-        const user = await this._repository.findOne(id);
-        if (!user) {
-            throw new NotFoundException(`Unable to find user with id '${id}'`);
-        }
         try {
+            if (!id) {
+                throw new BadRequestException(`missing id parameter`);
+            }
+            const user = await this._repository.findOne(id);
+            if (!user) {
+                throw new NotFoundException(`Unable to find user with id '${id}'`);
+            }
             const result = await this._repository.remove(user);
             return result;
         } catch (error) {
@@ -106,6 +106,10 @@ export default class UserService {
             const emailUser = await this._repository.findOne({ where: { email } });
             if (emailUser) {
                 throw new EntityConflictException(`user with that email already exist`);
+            }
+            const isEmail = await validator.isEmail(email);
+            if (!isEmail) {
+                throw new BadRequestException(`validation errors: illegal email '${email}'`);
             }
             user.email = email;
         }

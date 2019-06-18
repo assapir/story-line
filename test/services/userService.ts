@@ -10,7 +10,7 @@ import Line from "../../src/models/line";
 import Story from "../../src/models/story";
 import User from "../../src/models/user";
 import UserService from "../../src/services/userService";
-import { seedDatabase, seedUser } from "../testHelper";
+import { failIfReached, seedDatabase, seedUser } from "../testHelper";
 
 describe(`UserService`, () => {
     let connection: Connection;
@@ -40,7 +40,7 @@ describe(`UserService`, () => {
             it(`should throw NotFoundException`, async () => {
                 try {
                     await service.getUser(`not existing Id`);
-                    assert.fail(`the call above should throw`);
+                    failIfReached();
                 } catch (error) {
                     expect(error).to.be.instanceOf(NotFoundException);
                     expect(error.message).to.equal(`Unable to find user with id 'not existing Id'`);
@@ -52,7 +52,7 @@ describe(`UserService`, () => {
             it(`should throw NotFoundException`, async () => {
                 try {
                     await service.getAllUsers();
-                    assert.fail(`the call above should throw`);
+                    failIfReached();
                 } catch (error) {
                     expect(error).to.be.instanceOf(NotFoundException);
                     expect(error.message).to.equal(`No users found`);
@@ -106,7 +106,7 @@ describe(`UserService`, () => {
             it(`should throw if the 'id' parameter wasn't supplied`, async () => {
                 try {
                     await service.getUser(``);
-                    assert.fail(`the call above should throw`);
+                    failIfReached();
                 } catch (error) {
                     expect(error).to.be.instanceOf(BadRequestException);
                     expect(error.message).to.be.equal(`missing id parameter`);
@@ -116,7 +116,7 @@ describe(`UserService`, () => {
             it(`should throw if id is not in the DB`, async () => {
                 try {
                     await service.getUser(`not-in-db-id`);
-                    assert.fail(`the call above should throw`);
+                    failIfReached();
                 } catch (error) {
                     expect(error).to.be.instanceOf(NotFoundException);
                     expect(error.message).to.be.equal(`Unable to find user with id 'not-in-db-id'`);
@@ -140,7 +140,7 @@ describe(`UserService`, () => {
             it(`should throw if firstName is missing`, async () => {
                 try {
                     await service.createUser(``, `niceName`, `email@email.com`);
-                    assert.fail(`the call above should throw`);
+                    failIfReached();
                 } catch (error) {
                     expect(error).to.be.instanceOf(BadRequestException);
                     expect(error.message).to.be.equal(`missing firstName parameter`);
@@ -150,7 +150,7 @@ describe(`UserService`, () => {
             it(`should throw if lastName is missing`, async () => {
                 try {
                     await service.createUser(`niceName`, ``, `email@email.com`);
-                    assert.fail(`the call above should throw`);
+                    failIfReached();
                 } catch (error) {
                     expect(error).to.be.instanceOf(BadRequestException);
                     expect(error.message).to.be.equal(`missing lastName parameter`);
@@ -160,7 +160,7 @@ describe(`UserService`, () => {
             it(`should throw if email is missing`, async () => {
                 try {
                     await service.createUser(`niceName`, `nice second name`, ``);
-                    assert.fail(`the call above should throw`);
+                    failIfReached();
                 } catch (error) {
                     expect(error).to.be.instanceOf(BadRequestException);
                     expect(error.message).to.be.equal(`missing email parameter`);
@@ -170,7 +170,7 @@ describe(`UserService`, () => {
             it(`should throw if the email already in DB`, async () => {
                 try {
                     await service.createUser(`niceName`, `nice second name`, users[0].email);
-                    assert.fail(`the call above should throw`);
+                    failIfReached();
                 } catch (error) {
                     expect(error).to.be.instanceOf(EntityConflictException);
                     expect(error.message).to.be.equal(`user with that email already exist`);
@@ -180,7 +180,7 @@ describe(`UserService`, () => {
             it(`should throw if the email isn't valid email`, async () => {
                 try {
                     await service.createUser(`niceName`, `nice second name`, `not-an-email`);
-                    assert.fail(`the call above should throw`);
+                    failIfReached();
                 } catch (error) {
                     expect(error).to.be.instanceOf(BadRequestException);
                     expect(error.message).to.be.equal(`validation errors: illegal email 'not-an-email'`);
@@ -192,8 +192,8 @@ describe(`UserService`, () => {
                 const lastName = faker.name.lastName();
                 const email = faker.internet.email(firstName, lastName);
                 const result = await service.createUser(firstName,
-                                                        lastName,
-                                                        email);
+                    lastName,
+                    email);
                 expect(result).to.be.instanceOf(User);
                 expect(result.firstName).to.equal(firstName);
                 expect(result.lastName).to.equal(lastName);
@@ -205,7 +205,7 @@ describe(`UserService`, () => {
             it(`should throw if the 'id' parameter wasn't supplied`, async () => {
                 try {
                     await service.removeUser(``);
-                    assert.fail(`the call above should throw`);
+                    failIfReached();
                 } catch (error) {
                     expect(error).to.be.instanceOf(BadRequestException);
                     expect(error.message).to.be.equal(`missing id parameter`);
@@ -215,7 +215,7 @@ describe(`UserService`, () => {
             it(`should throw if id is not in the DB`, async () => {
                 try {
                     await service.removeUser(`not-in-db-id`);
-                    assert.fail(`the call above should throw`);
+                    failIfReached();
                 } catch (error) {
                     expect(error).to.be.instanceOf(NotFoundException);
                     expect(error.message).to.be.equal(`Unable to find user with id 'not-in-db-id'`);
@@ -225,7 +225,7 @@ describe(`UserService`, () => {
             it(`should throw whe removed user still has lines`, async () => {
                 try {
                     await service.removeUser(users[0].id);
-                    assert.fail(`the call above should throw`);
+                    failIfReached();
                 } catch (error) {
                     expect(error).to.be.instanceOf(NotAllowedException);
                     expect(error.message).to.be.equal(`Can't delete user that has lines`);
@@ -234,7 +234,121 @@ describe(`UserService`, () => {
 
             it(`should remove the user`, async () => {
                 const result = await service.removeUser(users[1].id);
+                // tslint:disable-next-line: no-unused-expression
                 expect(result.id).to.be.undefined;
+            });
+        });
+
+        describe(`updateUser`, () => {
+            it(`should throw if the 'id' parameter wasn't supplied`, async () => {
+                try {
+                    await service.updateUser(``,
+                        faker.name.firstName(),
+                        faker.name.lastName(),
+                        faker.internet.email());
+                    failIfReached();
+                } catch (error) {
+                    expect(error).to.be.instanceOf(BadRequestException);
+                    expect(error.message).to.be.equal(`missing id parameter`);
+                }
+            });
+
+            it(`should throw if no parameters to update was passed`, async () => {
+                try {
+                    await service.updateUser(users[0].id, ``, ``, ``);
+                    failIfReached();
+                } catch (error) {
+                    expect(error).to.be.instanceOf(BadRequestException);
+                    expect(error.message).to.be.equal(`no parameters to update`);
+                }
+            });
+
+            it(`should throw if the user id doesn't exist`, async () => {
+                try {
+                    await service.updateUser(`not real id`,
+                        faker.name.firstName(),
+                        faker.name.lastName(),
+                        faker.internet.email());
+                    failIfReached();
+                } catch (error) {
+                    expect(error).to.be.instanceOf(NotFoundException);
+                    expect(error.message).to.be.equal(`Unable to find user with id 'not real id'`);
+                }
+            });
+
+            it(`should throw if the email already used by other user`, async () => {
+                try {
+                    await service.updateUser(users[0].id,
+                        faker.name.firstName(),
+                        faker.name.lastName(),
+                        users[1].email);
+                    failIfReached();
+                } catch (error) {
+                    expect(error).to.be.instanceOf(EntityConflictException);
+                    expect(error.message).to.be.equal(`user with that email already exist`);
+                }
+            });
+
+            it(`should throw if the email is not a valid email`, async () => {
+                try {
+                    await service.updateUser(users[0].id,
+                        faker.name.firstName(),
+                        faker.name.lastName(),
+                        `not-an-email`);
+                    failIfReached();
+                } catch (error) {
+                    expect(error).to.be.instanceOf(BadRequestException);
+                    expect(error.message).to.be.equal(`validation errors: illegal email 'not-an-email'`);
+                }
+            });
+
+            it(`should update the user with the all passed parameters`, async () => {
+                const firstName = faker.name.firstName();
+                const lastName = faker.name.lastName();
+                const email = faker.internet.email();
+                const result = await service.updateUser(users[0].id,
+                                                        firstName,
+                                                        lastName,
+                                                        email);
+
+                expect(result.id).to.equal(users[0].id);
+                expect(result.firstName).to.equal(firstName);
+                expect(result.lastName).to.equal(lastName);
+                expect(result.email).to.equal(email);
+                expect(result.lines.length).to.equal(2);
+            });
+
+            it(`should update only the firstName parameter`, async () => {
+                const firstName = faker.name.firstName();
+                const result = await service.updateUser(users[0].id, firstName, ``, ``);
+
+                expect(result.id).to.equal(users[0].id);
+                expect(result.firstName).to.equal(firstName);
+                expect(result.lastName).to.equal(users[0].lastName);
+                expect(result.email).to.equal(users[0].email);
+                expect(result.lines.length).to.equal(2);
+            });
+
+            it(`should update only the lastName parameter`, async () => {
+                const lastName = faker.name.lastName();
+                const result = await service.updateUser(users[0].id, ``, lastName, ``);
+
+                expect(result.id).to.equal(users[0].id);
+                expect(result.firstName).to.equal(users[0].firstName);
+                expect(result.lastName).to.equal(lastName);
+                expect(result.email).to.equal(users[0].email);
+                expect(result.lines.length).to.equal(2);
+            });
+
+            it(`should update only the email parameter`, async () => {
+                const email = faker.internet.email(undefined, undefined, `microsoft.com`);
+                const result = await service.updateUser(users[0].id, ``, ``, email);
+
+                expect(result.id).to.equal(users[0].id);
+                expect(result.firstName).to.equal(users[0].firstName);
+                expect(result.lastName).to.equal(users[0].lastName);
+                expect(result.email).to.equal(email);
+                expect(result.lines.length).to.equal(2);
             });
         });
     });
