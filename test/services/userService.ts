@@ -4,6 +4,7 @@ import { after, before, beforeEach, describe, it } from "mocha";
 import { Connection, createConnection, Repository } from "typeorm";
 import BadRequestException from "../../src/exceptions/badRequestException";
 import EntityConflictException from "../../src/exceptions/entityConflictException";
+import NotAllowedException from "../../src/exceptions/notAllowedException";
 import NotFoundException from "../../src/exceptions/notFoundException";
 import Line from "../../src/models/line";
 import Story from "../../src/models/story";
@@ -197,6 +198,43 @@ describe(`UserService`, () => {
                 expect(result.firstName).to.equal(firstName);
                 expect(result.lastName).to.equal(lastName);
                 expect(result.email).to.equal(email);
+            });
+        });
+
+        describe(`removeUser`, () => {
+            it(`should throw if the 'id' parameter wasn't supplied`, async () => {
+                try {
+                    await service.removeUser(``);
+                    assert.fail(`the call above should throw`);
+                } catch (error) {
+                    expect(error).to.be.instanceOf(BadRequestException);
+                    expect(error.message).to.be.equal(`missing id parameter`);
+                }
+            });
+
+            it(`should throw if id is not in the DB`, async () => {
+                try {
+                    await service.removeUser(`not-in-db-id`);
+                    assert.fail(`the call above should throw`);
+                } catch (error) {
+                    expect(error).to.be.instanceOf(NotFoundException);
+                    expect(error.message).to.be.equal(`Unable to find user with id 'not-in-db-id'`);
+                }
+            });
+
+            it(`should throw whe removed user still has lines`, async () => {
+                try {
+                    await service.removeUser(users[0].id);
+                    assert.fail(`the call above should throw`);
+                } catch (error) {
+                    expect(error).to.be.instanceOf(NotAllowedException);
+                    expect(error.message).to.be.equal(`Can't delete user that has lines`);
+                }
+            });
+
+            it(`should remove the user`, async () => {
+                const result = await service.removeUser(users[1].id);
+                expect(result.id).to.be.undefined;
             });
         });
     });

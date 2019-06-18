@@ -8,7 +8,7 @@ describe(`NotFoundException`, () => {
         expect(exception.statusCode).to.be.equal(404);
     });
 
-    it(`should set default message to 'Bad Request'`, () => {
+    it(`should set default message to 'Not Found'`, () => {
         const exception = new NotFoundException();
         expect(exception.message).to.be.equal(`Not Found`);
     });
@@ -18,7 +18,7 @@ describe(`NotFoundException`, () => {
         expect(exception.message).to.be.equal(`This is very bad!`);
     });
 
-    it(`should set name to 'BadRequestException'`, () => {
+    it(`should set name to 'NotFoundException'`, () => {
         const exception = new NotFoundException();
         expect(exception.name).to.be.equal(`NotFoundException`);
     });

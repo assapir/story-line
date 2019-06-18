@@ -2,6 +2,7 @@ import { QueryFailedError, Repository } from "typeorm";
 import validator from "validator";
 import BadRequestException from "../exceptions/badRequestException";
 import EntityConflictException from "../exceptions/entityConflictException";
+import NotAllowedException from "../exceptions/notAllowedException";
 import NotFoundException from "../exceptions/notFoundException";
 import User from "../models/user";
 
@@ -76,8 +77,15 @@ export default class UserService {
         if (!user) {
             throw new NotFoundException(`Unable to find user with id '${id}'`);
         }
-        const result = await this._repository.remove(user);
-        return result;
+        try {
+            const result = await this._repository.remove(user);
+            return result;
+        } catch (error) {
+            if (error instanceof QueryFailedError) {
+                throw new NotAllowedException(`Can't delete user that has lines`);
+            }
+            throw error;
+        }
     }
 
     public async updateUser(id: string, firstName: string, lastName: string, email: string): Promise<User> {
