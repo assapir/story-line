@@ -28,7 +28,6 @@ class UserController {
 
     /**
      * Route for GET /
-     *
      */
     public async getAllUsers(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
@@ -83,7 +82,7 @@ class UserController {
      */
     public async deleteUser(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const result = this._service.removeUser(req.params.id);
+            const result = await this._service.removeUser(req.params.id);
             sendResult(res, result);
         } catch (error) {
             next(error);
@@ -95,7 +94,7 @@ class UserController {
      */
     public async updateUser(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const result = this._service.updateUser(req.params.id,
+            const result = await this._service.updateUser(req.params.id,
                                                         req.body.firstName,
                                                         req.body.lastName,
                                                         req.body.email);
@@ -119,7 +118,7 @@ class UserController {
             if (lines.length === 0) {
                 throw new NotFoundException(`No lines for user with id '${id}`);
             }
-            sendResult(res, {lines});
+            sendResult(res, { lines });
         } catch (error) {
             next(error);
         }

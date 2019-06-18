@@ -8,7 +8,8 @@
         "no-var-requires": false,
         "no-console": false,
         "variable-name": false,
-        "quotemark": [true, "backtick", "avoid-escape"]
+        "quotemark": [true, "backtick", "avoid-escape"],
+        "object-literal-sort-keys": false
     },
     "rulesDirectory": [],
     "linterOptions": {
