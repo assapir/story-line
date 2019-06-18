@@ -4,17 +4,21 @@ import NotFoundException from "../exceptions/notFoundException";
 import Line from "../models/line";
 
 export default class LineService {
+
     private readonly _repository: Repository<Line>;
+
     constructor(repository: Repository<Line>) {
         this._repository = repository;
     }
 
-    public async getLine(id: string): Promise<Line> {
+    public async getLine(id: string, withRelations: boolean = false): Promise<Line> {
         if (!id) {
             throw new BadRequestException(`missing id parameter`);
         }
 
-        const line = await this._repository.findOne(id);
+        const line = withRelations ?
+            await this._repository.findOne(id, { relations: [`user`, `story`] }) :
+            await this._repository.findOne(id);
         if (!line) {
             throw new NotFoundException(`Unable to find line with id '${id}'`);
         }

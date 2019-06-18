@@ -2,11 +2,6 @@
     "extends": "@istanbuljs/nyc-config-typescript",
     "all": true,
     "clean": true,
-    "check-coverage": true,
-    "branches": 80,
-    "lines": 80,
-    "functions": 80,
-    "statements": 80,
     "exclude": [
         "src/migrations/*.ts",
         "src/consts.ts"

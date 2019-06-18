@@ -1,3 +1,4 @@
+import { assert } from "chai";
 import { Application } from "express";
 import faker from "faker";
 import { Connection, QueryRunner } from "typeorm";
@@ -56,4 +57,8 @@ export async function seedLine(queryRunner: QueryRunner, user: User, story: Stor
     firstLine.story = story;
     const result = await lineRepository.save(firstLine);
     return result;
+}
+
+export function failIfReached() {
+    assert.fail(`the call above should throw`);
 }
