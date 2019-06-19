@@ -1,4 +1,4 @@
-export default class Exception extends Error {
+export default abstract class Exception extends Error {
 
     private _statusCode: number;
     private _name: string;
