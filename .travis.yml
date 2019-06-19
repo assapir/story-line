@@ -21,7 +21,7 @@ notifications:
   email: false
   slack:
     rooms:
-	  - assafsapir:Tv6pbfSHv3a68VaCMwfAoJIH#story-line
+      - assafsapir:Tv6pbfSHv3a68VaCMwfAoJIH#story-line
 
 branches:
   only:
