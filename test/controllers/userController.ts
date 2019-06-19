@@ -120,6 +120,35 @@ describe(`UserController`, () => {
             expect(result.body.lines).to.deep.equal(user.lines);
         });
 
+        it(`should return error if the user has no lines`, async () => {
+            const user1 = new User();
+            user1.id = faker.random.uuid();
+            user1.firstName = faker.name.firstName();
+            user1.lastName = faker.name.lastName();
+            user1.email = faker.internet.email();
+            user1.lines = [];
+
+            userService.getUser(user1.id).returns(Promise.resolve(user1));
+            const result = await request.get(`${usersPath}/${user1.id}/lines`)
+                .type(`form`);
+            expect(result.status).to.equal(404);
+            expect(result.body.error).to.equal(`No lines for user with id '${user1.id}`);
+        });
+
+        it(`should return error if the user lines are undefined`, async () => {
+            const user1 = new User();
+            user1.id = faker.random.uuid();
+            user1.firstName = faker.name.firstName();
+            user1.lastName = faker.name.lastName();
+            user1.email = faker.internet.email();
+
+            userService.getUser(user1.id).returns(Promise.resolve(user1));
+            const result = await request.get(`${usersPath}/${user1.id}/lines`)
+                .type(`form`);
+            expect(result.status).to.equal(404);
+            expect(result.body.error).to.equal(`No lines for user with id '${user1.id}`);
+        });
+
         it(`should return error if error thrown in the service`, async () => {
             userService.getUser(user.id)
                 .returns(Promise.reject(new NotFoundException(`Unable to find user with id '${user.id}'`)));
@@ -173,7 +202,7 @@ describe(`UserController`, () => {
             });
         });
 
-        it(`should call LineService.createNewLine and return the created line`, async () => {
+        it(`should call UserService.createUser and return the created user`, async () => {
             const user1 = new User();
             user1.id = faker.random.uuid();
             user1.firstName = faker.name.firstName();

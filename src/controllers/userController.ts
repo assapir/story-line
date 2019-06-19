@@ -111,11 +111,9 @@ class UserController {
         try {
             const id = req.params.id;
             const user = await this._service.getUser(id);
-            if (!user) {
-                throw new NotFoundException(`Unable to find user with id '${id}'`);
-            }
+            // if there no such user, this._service will throw
             const lines = user.lines;
-            if (lines.length === 0) {
+            if (!lines || lines.length === 0) {
                 throw new NotFoundException(`No lines for user with id '${id}`);
             }
             sendResult(res, { lines });
