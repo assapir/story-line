@@ -22,6 +22,16 @@ export async function getStoryById(connection: Connection, id: string): Promise<
     return await userRepository.findOneOrFail(id);
 }
 
+export async function fillDatabase(connection: Connection, count: number): Promise<void> {
+    const queryRunner = connection.createQueryRunner();
+    await connection.synchronize(true); // reset it
+    for (let i = 0; i < count; ++i) {
+        const user = await seedUser(queryRunner);
+        const story = await seedStory(queryRunner);
+        await seedLine(queryRunner, user, story);
+    }
+}
+
 export async function seedDatabase(connection: Connection): Promise<[User, Story, Line[]]> {
     const queryRunner = connection.createQueryRunner();
     await connection.synchronize(true); // reset it

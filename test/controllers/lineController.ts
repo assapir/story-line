@@ -32,7 +32,7 @@ describe(`LineController`, () => {
         app.use(bodyParser.urlencoded({ extended: true }));
         LineController(app, lineService);
         errorHandlerController(app);
-        request = await supertest(app);
+        request = supertest(app);
     });
 
     describe(`GET /`, () => {

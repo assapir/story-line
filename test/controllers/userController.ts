@@ -38,7 +38,7 @@ describe(`UserController`, () => {
         app.use(bodyParser.urlencoded({ extended: true }));
         UserController(app, userService);
         errorHandlerController(app);
-        request = await supertest(app);
+        request = supertest(app);
     });
 
     describe(`GET /`, () => {
