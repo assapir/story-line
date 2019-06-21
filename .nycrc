@@ -4,8 +4,7 @@
     "clean": true,
     "exclude": [
         "src/migrations/*.ts",
-        "src/consts.ts",
-        "src/app.ts"
+        "src/consts.ts"
     ],
     "include": [
         "src/**/*.ts"

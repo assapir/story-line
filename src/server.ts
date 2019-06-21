@@ -7,10 +7,9 @@ import { Router } from "./router";
 
 const port = config.port || 80;
 export const app: Express = express(); // need for tests
-export let server: Server;
 
-export async function startServer() {
+export async function startServer(): Promise<Server> {
     const connection = await createConnection();
     Router.route(app, connection);
-    server = app.listen(port);
+    return app.listen(port);
 }

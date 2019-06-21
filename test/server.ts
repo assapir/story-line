@@ -1,17 +1,19 @@
 import { expect } from "chai";
+import { Server } from "http";
 import { after, before, beforeEach, describe, it } from "mocha";
 import supertest from "supertest";
 import { Connection, getConnection } from "typeorm";
 import { usersPath } from "../src/consts";
-import { app, server, startServer } from "../src/server";
+import { app, startServer } from "../src/server";
 import { fillDatabase } from "./testHelper";
 
 describe(`Server integration tests`, () => {
     let connection: Connection;
+    let server: Server;
 
     before(async () => {
         process.env.NODE_ENV = `test`; // for using test in memory DB
-        await startServer();
+        server = await startServer();
     });
 
     after(async () => {
