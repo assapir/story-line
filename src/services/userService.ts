@@ -58,8 +58,7 @@ export default class UserService {
             user.firstName = firstName;
             user.lastName = lastName;
             user.email = email;
-            const result = await this._repository.save(user);
-            return result;
+            return await this._repository.save(user);
         } catch (error) {
             if (error instanceof QueryFailedError) {
                 throw new EntityConflictException(`user with that email already exist`);

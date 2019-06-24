@@ -1,4 +1,4 @@
-import { assert, expect } from "chai";
+import { expect } from "chai";
 import faker from "faker";
 import { after, before, beforeEach, describe, it } from "mocha";
 import { Connection, createConnection, Repository } from "typeorm";

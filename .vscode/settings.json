@@ -5,5 +5,19 @@
     },
     "cSpell.words": [
         "typeorm"
-    ]
+    ],
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#0f68ec",
+        "activityBar.foreground": "#e7e7e7",
+        "activityBar.inactiveForeground": "#e7e7e799",
+        "activityBarBadge.background": "#f787b4",
+        "activityBarBadge.foreground": "#15202b",
+        "titleBar.activeBackground": "#0c53bc",
+        "titleBar.inactiveBackground": "#0c53bc99",
+        "titleBar.activeForeground": "#e7e7e7",
+        "titleBar.inactiveForeground": "#e7e7e799",
+        "statusBar.background": "#0c53bc",
+        "statusBarItem.hoverBackground": "#0f68ec",
+        "statusBar.foreground": "#e7e7e7"
+    }
 }

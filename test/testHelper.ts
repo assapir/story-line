@@ -37,7 +37,9 @@ export async function seedDatabase(connection: Connection): Promise<[User, Story
     await connection.synchronize(true); // reset it
     const user = await seedUser(queryRunner);
     const story = await seedStory(queryRunner);
-    const lines = [await seedLine(queryRunner, user, story), await seedLine(queryRunner, user, story)];
+    const lines: Line[] = [];
+    lines.push(await seedLine(queryRunner, user, story));
+    lines.push(await seedLine(queryRunner, user, story));
     return [user, story, lines];
 }
 
