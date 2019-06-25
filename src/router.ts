@@ -3,10 +3,13 @@ import { Application, Router as expressRouter } from "express";
 import { Connection } from "typeorm";
 import ErrorHandlerController from "./controllers/errorHandlerController";
 import LineController from "./controllers/lineController";
-import userController from "./controllers/userController";
+import StoryController from "./controllers/storyController";
+import UserController from "./controllers/userController";
 import Line from "./models/line";
+import Story from "./models/story";
 import User from "./models/user";
 import LineService from "./services/lineService";
+import StoryService from "./services/storyService";
 import UserService from "./services/userService";
 
 export class Router {
@@ -23,6 +26,7 @@ export class Router {
         app.use(bodyParser.urlencoded({ extended: true }));
         Router.createLineController(connection, app);
         Router.createUserController(connection, app);
+        Router.createStoryController(connection, app);
 
         ErrorHandlerController(app);
     }
@@ -36,6 +40,12 @@ export class Router {
     private static createUserController(connection: Connection, app: Application) {
         const userRepository = connection.getRepository(User);
         const userService = new UserService(userRepository);
-        userController(app, userService);
+        UserController(app, userService);
+    }
+
+    private static createStoryController(connection: Connection, app: Application) {
+        const storyRepository = connection.getRepository(Story);
+        const storyService = new StoryService(storyRepository);
+        StoryController(app, storyService);
     }
 }

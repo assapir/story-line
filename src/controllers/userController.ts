@@ -95,9 +95,9 @@ class UserController {
     public async updateUser(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const result = await this._service.updateUser(req.params.id,
-                                                        req.body.firstName,
-                                                        req.body.lastName,
-                                                        req.body.email);
+                                                          req.body.firstName,
+                                                          req.body.lastName,
+                                                          req.body.email);
             sendResult(res, result);
         } catch (error) {
             next(error);
@@ -124,7 +124,6 @@ class UserController {
 
     private initializeRouter(app: Application): void {
         const router = Router();
-        app.use(usersPath, router);
         router
             .get(`/`, (req, res, next) => this.getAllUsers(req, res, next))
             .get(`/:id`, (req, res, next) => this.getUser(req, res, next))
@@ -132,6 +131,7 @@ class UserController {
             .post(`/`, (req, res, next) => this.createNewUser(req, res, next))
             .delete(`/:id`, (req, res, next) => this.deleteUser(req, res, next))
             .put(`/:id`, (req, res, next) => this.updateUser(req, res, next));
+        app.use(usersPath, router);
     }
 }
 

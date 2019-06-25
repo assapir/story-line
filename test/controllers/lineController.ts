@@ -5,7 +5,7 @@ import express, { Application } from "express";
 import { beforeEach, describe, it } from "mocha";
 import supertest from "supertest";
 import { linesPath } from "../../src/consts";
-import errorHandlerController from "../../src/controllers/errorHandlerController";
+import ErrorHandlerController from "../../src/controllers/errorHandlerController";
 import LineController from "../../src/controllers/lineController";
 import BadRequestException from "../../src/exceptions/badRequestException";
 import NotFoundException from "../../src/exceptions/notFoundException";
@@ -31,7 +31,7 @@ describe(`LineController`, () => {
         app = express();
         app.use(bodyParser.urlencoded({ extended: true }));
         LineController(app, lineService);
-        errorHandlerController(app);
+        ErrorHandlerController(app);
         request = supertest(app);
     });
 

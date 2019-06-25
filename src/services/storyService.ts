@@ -91,29 +91,4 @@ export default class StoryService {
         story.name = newName;
         return await this._repository.save(story);
     }
-
-    public async addLineToStory(id: string, line: Line): Promise<Story> {
-        if (!id) {
-            throw new BadRequestException(`missing id parameter`);
-        }
-
-        const story = await this._repository.findOne(id);
-        if (!story) {
-            throw new NotFoundException(`Unable to find story with id '${id}'`);
-        }
-
-        if (!line || !line.text || line.text.length === 0) {
-            throw new BadRequestException(`missing line parameter or it does not have text`);
-        }
-
-        if (line.storyId !== undefined || line.story !== undefined) {
-            throw new NotAllowedException(`can't change line story`);
-        }
-
-        line.storyId = id; // make sure it belongs to the right story
-        await this._repository.manager.getRepository(Line).save(line);
-
-        story.lines.push(line);
-        return await this._repository.save(story);
-    }
 }

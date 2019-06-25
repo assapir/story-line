@@ -11,6 +11,7 @@
     ],
     "reporter": [
         "text",
+        "html",
         "lcovonly"
     ],
     "require": [

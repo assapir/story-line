@@ -3,7 +3,7 @@ import { Server } from "http";
 import { after, before, beforeEach, describe, it } from "mocha";
 import supertest from "supertest";
 import { Connection, getConnection } from "typeorm";
-import { usersPath } from "../src/consts";
+import { linesPath, usersPath } from "../src/consts";
 import { app, startServer } from "../src/server";
 import { fillDatabase } from "./testHelper";
 
@@ -38,5 +38,15 @@ describe(`Server integration tests`, () => {
         expect(result.body).to.have.property(`users`);
         expect(result.body.users).to.be.an.instanceof(Array);
         expect(result.body.users).to.have.lengthOf(100);
+    });
+
+    it(`should fetch all lines from database`, async () => {
+        const result = await request.get(linesPath);
+        // tslint:disable-next-line: no-unused-expression
+        expect(result.ok).to.be.true;
+        expect(result.type).to.equal(`application/json`);
+        expect(result.body).to.have.property(`lines`);
+        expect(result.body.lines).to.be.an.instanceof(Array);
+        expect(result.body.lines).to.have.lengthOf(100);
     });
 });

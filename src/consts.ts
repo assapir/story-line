@@ -7,3 +7,4 @@ export const apiVersion: string = `v1`;
 
 export const linesPath: string = `/${prefix}/${apiVersion}/lines`;
 export const usersPath: string = `/${prefix}/${apiVersion}/users`;
+export const storiesPath: string = `/${prefix}/${apiVersion}/stories`;

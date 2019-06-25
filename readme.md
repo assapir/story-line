@@ -1,7 +1,10 @@
 # story-line
 ## Many lines becomes a story
-[![Build Status](https://travis-ci.org/meijin007/story-line.svg?branch=master)](https://travis-ci.org/meijin007/story-line) [![Coverage Status](https://coveralls.io/repos/github/meijin007/story-line/badge.svg?branch=master)](https://coveralls.io/github/meijin007/story-line?branch=master)
-<br />
+
+[![Build Status](https://travis-ci.org/meijin007/story-line.svg?branch=master)](https://travis-ci.org/meijin007/story-line) [![Coverage Status](https://coveralls.io/repos/github/meijin007/story-line/badge.svg?branch=master)](https://coveralls.io/github/meijin007/story-line?branch=master) [![Known Vulnerabilities](https://snyk.io//test/github/meijin007/story-line/badge.svg?targetFile=package.json)](https://snyk.io//test/github/meijin007/story-line?targetFile=package.json) [![Last commit](https://img.shields.io/github/last-commit/meijin007/story-line.svg)](https://github.com/meijin007/story-line/commits/master) ![GitHub contributors](https://img.shields.io/github/contributors-anon/meijin007/story-line.svg)
+<br /> 
+![GitHub](https://img.shields.io/github/license/meijin007/story-line.svg?color=blue) ![GitHub top language](https://img.shields.io/github/languages/top/meijin007/story-line.svg) ![GitHub package.json dependency version (dev dep on branch)](https://img.shields.io/github/package-json/dependency-version/meijin007/story-line/dev/typescript.svg) ![Assaf Badges](https://img.shields.io/badge/Assaf-Like%20badges-blue.svg)
+
 ## Backend Architecture
 * Heavily use of Dependency Injection (without any framework).
 * Express.js __Controllers__  accepting a
@@ -22,5 +25,7 @@
 npm run typeorm migration:generate -- -n NameOfMigration
 ```
 <br /> 
-<br /> 
+
+
+
 Ⓒ Created By Assaf Sapir, 2019, Under MIT License
