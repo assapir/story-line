@@ -53,7 +53,7 @@ class StoryController {
      */
     public async createNewStory(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const story = this._service.createStory(req.params.name);
+            const story = await this._service.createStory(req.body.name);
             sendResult(res, story);
         } catch (error) {
             next(error);
@@ -65,7 +65,7 @@ class StoryController {
      */
     public async changeStoryName(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const story = this._service.updateStoryName(req.params.id, req.params.name);
+            const story = await this._service.updateStoryName(req.params.id, req.body.name);
             sendResult(res, story);
         } catch (error) {
             next(error);
@@ -73,11 +73,11 @@ class StoryController {
     }
 
     /**
-     * Route for DELETE /:d
+     * Route for DELETE /:id
      */
     public async deleteStory(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const story = this._service.deleteStory(req.params.id);
+            const story = await this._service.deleteStory(req.params.id);
             sendResult(res, story);
         } catch (error) {
             next(error);
@@ -89,7 +89,7 @@ class StoryController {
      */
     public async resetStory(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const story = this._service.resetStory(req.params.id);
+            const story = await this._service.resetStory(req.params.id);
             sendResult(res, story);
         } catch (error) {
             next(error);

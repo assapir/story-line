@@ -7,7 +7,7 @@
 
 ## Backend Architecture
 * Heavily use of Dependency Injection (without any framework).
-* Express.js __Controllers__  accepting a
+* Express.js __Controllers__  accepting a∏
 * __Service__ which is in abstract on the
 * __Model__ which is defined using [TypeORM]([https://typeorm.io/]) as ORM.
   * Currently using Sqlite3.
