@@ -99,12 +99,12 @@ class StoryController {
     private initializeRouter(app: Application): void {
         const router = Router();
         router
-            .get(`/`, (req, res, next) => this.getAllStories(req, res, next))
-            .get(`/:id`, (req, res, next) => this.getStory(req, res, next))
-            .post(`/`, (req, res, next) => this.createNewStory(req, res, next))
-            .delete(`/:id`, (req, res, next) => this.deleteStory(req, res, next))
-            .delete(`/:id/lines`, (req, res, next) => this.resetStory(req, res, next))
-            .put(`/:id`, (req, res, next) => this.changeStoryName(req, res, next));
+            .get(`/`, this.getAllStories.bind(this))
+            .get(`/:id`, this.getStory.bind(this))
+            .post(`/`, this.createNewStory.bind(this))
+            .delete(`/:id`, this.deleteStory.bind(this))
+            .delete(`/:id/lines`, this.resetStory.bind(this))
+            .put(`/:id`, this.changeStoryName.bind(this));
         app.use(storiesPath, router);
     }
 }

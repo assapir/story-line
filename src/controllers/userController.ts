@@ -125,12 +125,12 @@ class UserController {
     private initializeRouter(app: Application): void {
         const router = Router();
         router
-            .get(`/`, (req, res, next) => this.getAllUsers(req, res, next))
-            .get(`/:id`, (req, res, next) => this.getUser(req, res, next))
-            .get(`/:id/lines`, (req, res, next) => this.getAllUserLines(req, res, next))
-            .post(`/`, (req, res, next) => this.createNewUser(req, res, next))
-            .delete(`/:id`, (req, res, next) => this.deleteUser(req, res, next))
-            .put(`/:id`, (req, res, next) => this.updateUser(req, res, next));
+            .get(`/`, this.getAllUsers.bind(this))
+            .get(`/:id`,  this.getUser.bind(this))
+            .get(`/:id/lines`, this.getAllUserLines.bind(this))
+            .post(`/`, this.createNewUser.bind(this))
+            .delete(`/:id`, this.deleteUser.bind(this))
+            .put(`/:id`, this.updateUser.bind(this));
         app.use(usersPath, router);
     }
 }

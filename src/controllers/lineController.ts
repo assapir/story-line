@@ -131,13 +131,13 @@ class LineController {
         const router = Router();
         app.use(linesPath, router);
         router
-            .get(`/`,  (req, res, next) => this.getAllLines(req, res, next))
-            .get(`/:id`, (req, res, next) => this.getLine(req, res, next))
-            .get(`/:id/author`, (req, res, next) => this.getAuthor(req, res, next))
-            .get(`/:id/story`, (req, res, next) => this.getStory(req, res, next))
-            .post(`/`, (req, res, next) => this.createNewLine(req, res, next))
-            .delete(`/:id`, (req, res, next) => this.deleteLine(req, res, next))
-            .put(`/:id`, (req, res, next) => this.updateLine(req, res, next));
+            .get(`/`, this.getAllLines.bind(this))
+            .get(`/:id`, this.getLine.bind(this))
+            .get(`/:id/author`, this.getAuthor.bind(this))
+            .get(`/:id/story`, this.getStory.bind(this))
+            .post(`/`, this.createNewLine.bind(this))
+            .delete(`/:id`, this.deleteLine.bind(this))
+            .put(`/:id`, this.updateLine.bind(this));
     }
 }
 
