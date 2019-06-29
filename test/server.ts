@@ -3,7 +3,10 @@ import { Server } from "http";
 import { after, before, beforeEach, describe, it } from "mocha";
 import supertest from "supertest";
 import { Connection, getConnection } from "typeorm";
-import { linesPath, usersPath } from "../src/consts";
+import { linesPath, storiesPath, usersPath } from "../src/consts";
+import Line from "../src/models/line";
+import Story from "../src/models/story";
+import User from "../src/models/user";
 import { app, startServer } from "../src/server";
 import { fillDatabase } from "./testHelper";
 
@@ -48,5 +51,59 @@ describe(`Server integration tests`, () => {
         expect(result.body).to.have.property(`lines`);
         expect(result.body.lines).to.be.an.instanceof(Array);
         expect(result.body.lines).to.have.lengthOf(100);
+    });
+
+    describe(`full usage flow`, () => {
+        it(`should create user, create story and add lines to it`, async () => {
+            let response = await request
+                                 .post(`${usersPath}/`)
+                                 .type(`form`)
+                                 .send({
+                                    firstName: `Assaf`,
+                                    lastName: `Sapir`,
+                                    email: `not-my-mail@not-my-domain.cc`,
+                                });
+            const user = response.body as User;
+
+            response = await request
+                             .post(`${storiesPath}/`)
+                             .type(`form`)
+                             .send({
+                                name: `a real story`,
+                             });
+            const story = response.body as Story;
+
+            response = await request
+                             .post(`${linesPath}/`)
+                             .type(`form`)
+                             .send({
+                                text: `Once upon a time, in a far far away kingdom,`,
+                                storyId: story.id,
+                                userId: user.id,
+                             });
+            const firstLine = response.body as Line;
+
+            response = await request
+                             .post(`${linesPath}/`)
+                             .type(`form`)
+                             .send({
+                                text: `their was a prince, a very ugly one`,
+                                storyId: story.id,
+                                userId: user.id,
+                             });
+            const secondLine = response.body as Line;
+
+            response = await request
+                             .get(`${storiesPath}/${story.id}`);
+            const fullStory = response.body as Story;
+            expect(fullStory.lines[0]).to.deep.equal(firstLine);
+            expect(fullStory.lines[1]).to.deep.equal(secondLine);
+
+            response = await request
+                             .get(`${usersPath}/${user.id}`);
+            const fullUser = response.body as User;
+            expect(fullUser.lines[0]).to.deep.equal(firstLine);
+            expect(fullUser.lines[1]).to.deep.equal(secondLine);
+        });
     });
 });
