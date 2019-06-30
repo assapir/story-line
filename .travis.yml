@@ -11,6 +11,7 @@ os:
 dist: xenial  
 
 before_script:
+  - cd api
   - npm install
   - npm run build
 
