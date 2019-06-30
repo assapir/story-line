@@ -1,18 +1,17 @@
-
 # Coverage directory used by tools like istanbul
-./**/coverage
+*/**/coverage
 
 # nyc test coverage
-./**/nyc_output
+*/**/.nyc_output
 
 # Dependency directories
-./**/node_modules/
+*/**/node_modules/
 
 # Optional npm cache directory
 .npm
 
 # db
-./**/database.sqlite3
+*/**/database.sqlite3
 
 # output js
-./**/lib/**/*
+*/**/lib/**/*
