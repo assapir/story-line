@@ -5,6 +5,11 @@
 <br /> 
 ![GitHub](https://img.shields.io/github/license/meijin007/story-line.svg?color=blue) ![GitHub top language](https://img.shields.io/github/languages/top/meijin007/story-line.svg) ![Assaf Badges](https://img.shields.io/badge/Assaf-Like%20badges-blue.svg)
 
+## Monorepo Architecture
+* `/api` is for the backend.
+* `/ui` is for the front end
+* >TODO: Create docker / docker compose for running 
+
 ## Backend Architecture
 * Heavily use of Dependency Injection (without any framework).
 * Express.js __Controllers__  accepting a∏
