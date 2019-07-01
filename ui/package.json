@@ -1,0 +1,33 @@
+{
+  "name": "story-line-ui",
+  "version": "0.0.1",
+  "description": "ui service for story-line",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "tslint --fix --project \"tsconfig.json\" && node --inspect -r ts-node/register src/index.ts",
+    "prod": "tslint --fix --project \"tsconfig.json\" && tsc --inlineSourceMap false --inlineSources false --removeComments true && NODE_ENV=production node ./lib/src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/meijin007/story-line.git"
+  },
+  "author": "Assaf Sapir",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/meijin007/story-line/issues"
+  },
+  "homepage": "https://github.com/meijin007/story-line#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.0",
+    "@types/node": "^12.0.10",
+    "ts-node": "^8.3.0",
+    "tslint": "^5.18.0",
+    "typescript": "^3.5.2"
+  }
+}
