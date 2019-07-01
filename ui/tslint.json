@@ -14,7 +14,7 @@
     "rulesDirectory": [],
     "linterOptions": {
         "include": [
-            "src/**/*"
+            "src/**/*.ts"
         ]
     }
 }
