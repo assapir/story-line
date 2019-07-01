@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { Component } from 'react';
+import Footer from './Footer';
 
-export default class App extends React.Component {
+export default class App extends Component {
   public render() {
     return (
-      <h1>First react component</h1>
+      <div>
+        <h1>First react component</h1>
+        <Footer author={`Assaf Sapir`} />
+      </div>
     );
   }
 }
