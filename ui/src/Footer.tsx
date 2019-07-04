@@ -13,8 +13,8 @@ export default class Footer extends Component<FooterProps> {
         return (
             <footer>
                 <span>Under MIT License</span>
-                <span>{this.props.author}</span>
-                <ExternalLink src={this.props.github} text={this.props.projectName} />
+                <span>© {this.props.author}</span>
+                <ExternalLink src={this.props.github} text={this.props.projectName} newTab={true}/>
             </footer>
         );
     }

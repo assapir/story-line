@@ -3,12 +3,12 @@ import React, { Component } from "react";
 interface ExternalLinkProps {
     src: string;
     text: string;
+    newTab?: boolean;
 }
 
 export default class ExternalLink extends Component<ExternalLinkProps> {
     public render() {
-        return (
-            <a href={this.props.src} target="_blank" rel="noopener noreferrer">{this.props.text}</a>
-        );
+        const newTab: string = this.props.newTab ? `"_blank" rel="noopener noreferrer"` : `_self`;
+        return <a href={this.props.src} target={newTab}> {this.props.text}</a>;
     }
 }
