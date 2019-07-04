@@ -17,6 +17,11 @@ before_script:
 
 script:
   - npm run test:ci
+  - cd ..
+  - cd ui
+  - npm install
+  - npm run build
+  - npm run test:ci
 
 notifications:
   email: false

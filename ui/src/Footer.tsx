@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import './Footer.scss';
-import ExternalLink from './misc/ExternalLink';
+import React, { Component } from "react";
+import "./Footer.scss";
+import ExternalLink from "./misc/ExternalLink";
 
 interface FooterProps {
     author: string;

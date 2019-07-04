@@ -16,7 +16,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --coverage",
+    "test:ci": "react-scripts test --coverage --watchAll=false && cat ./coverage/lcov.info | coveralls",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -35,6 +36,7 @@
     ]
   },
   "devDependencies": {
+    "coveralls": "^3.0.4",
     "tslint": "^5.18.0"
   }
 }
