@@ -9,7 +9,8 @@ interface ExternalLinkProps {
 
 export default class ExternalLink extends Component<ExternalLinkProps> {
     public render() {
-        const newTab: string = this.props.newTab ? `"_blank" rel="noopener noreferrer"` : `_self`;
-        return <a href={this.props.src} target={newTab}>{this.props.text}</a>;
+        const target: string = this.props.newTab ? `_blank` : `_self`;
+        const rel: string | undefined = this.props.newTab ? `noreferrer noopener` : undefined;
+        return <a href={this.props.src} target={target} rel={rel}>{this.props.text}</a>;
     }
 }
