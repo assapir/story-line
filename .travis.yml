@@ -18,6 +18,13 @@ before_script:
 script:
   - npm run test:ci
 
+after_script:
+  - cd ..
+  - cd ui
+  - npm install
+  - npm run build
+  - npm run test:ci
+
 notifications:
   email: false
   slack:

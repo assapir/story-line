@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import './App.scss';
-import Footer from './Footer';
-import * as Resources from './resources';
+import React, { Component } from "react";
+import "./App.scss";
+import Footer from "./Footer";
+import * as Resources from "./resources";
 
 export default class App extends Component {
   public render() {
