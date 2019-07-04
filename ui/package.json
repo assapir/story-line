@@ -17,7 +17,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --coverage --coverageReporters=text-lcov",
-    "test:ci": "react-scripts test --coverage --watchAll=false && cat ./coverage/lcov.info | coveralls",
+    "test:ci": "react-scripts test --coverage --coverageReporters=text-lcov --watchAll=false && cat ./coverage/lcov.info | coveralls",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
