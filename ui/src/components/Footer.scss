@@ -1,11 +1,8 @@
 footer {
   bottom: 0;
-  width: 100%;
-  position: absolute;
-}
 
-footer * {
-  font-family: Arial, Helvetica, sans-serif;
-  margin: auto;
-  margin-bottom: 0.5rem;
+  span,
+  a {
+    margin: auto;
+  }
 }

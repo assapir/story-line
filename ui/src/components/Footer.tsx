@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import "./Footer.scss";
 import ExternalLink from "../misc/ExternalLink";
+import "./Footer.scss";
 
 interface FooterProps {
     author: string;
@@ -11,7 +11,7 @@ interface FooterProps {
 export default class Footer extends Component<FooterProps> {
     public render() {
         return (
-            <footer>
+            <footer className="common">
                 <span>Under MIT License</span>
                 <span>© {this.props.author}</span>
                 <ExternalLink src={this.props.github} text={this.props.projectName} newTab={true}/>
