@@ -4,7 +4,9 @@ import "./NavBar.scss";
 export default class NavBar extends Component {
     public render() {
         return (
-            <header className="common"></header>
+            <header className="common">
+                <div>Story Line</div>
+            </header>
         );
     }
 }
