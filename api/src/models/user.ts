@@ -23,10 +23,7 @@ export default class User implements IUser {
     public email: string;
 
     @Column({ nullable: false })
-    public saltedPassword: string;
-
-    @Column({ nullable: false })
-    public salt: string;
+    public password: string;
 
     @OneToMany((type) => Line, (line) => line.user, {
         eager: true,

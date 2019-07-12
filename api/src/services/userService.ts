@@ -59,7 +59,7 @@ export default class UserService {
             }
 
             const actualUser: User = Object.assign(user);
-            [actualUser.saltedPassword, actualUser.salt] = await CryptoService.createPasswordAndSalt(password);
+            actualUser.password = await CryptoService.createPassword(password);
 
             return await this._repository.save(actualUser);
         } catch (error) {
