@@ -4,10 +4,10 @@ import BadRequestException from "../exceptions/badRequestException";
 import EntityConflictException from "../exceptions/entityConflictException";
 import NotAllowedException from "../exceptions/notAllowedException";
 import NotFoundException from "../exceptions/notFoundException";
-import User from "../models/user";
+import User, { IUser } from "../models/user";
+import CryptoService from "./cryptoService";
 
 export default class UserService {
-
     private readonly _repository: Repository<User>;
 
     constructor(repository: Repository<User>) {
@@ -36,29 +36,32 @@ export default class UserService {
         return users;
     }
 
-    public async createUser(firstName: string, lastName: string, email: string): Promise<User> {
+    public async createUser(user: IUser, password: string): Promise<IUser> {
         try {
-            if (!firstName) {
+            if (!user.firstName) {
                 throw new BadRequestException(`missing firstName parameter`);
             }
 
-            if (!lastName) {
+            if (!user.lastName) {
                 throw new BadRequestException(`missing lastName parameter`);
             }
 
-            if (!email) {
+            if (!user.email) {
                 throw new BadRequestException(`missing email parameter`);
             }
-            const isEmail = await validator.isEmail(email);
+            const isEmail = await validator.isEmail(user.email);
             if (!isEmail) {
-                throw new BadRequestException(`validation errors: illegal email '${email}'`);
+                throw new BadRequestException(`validation errors: illegal email '${user.email}'`);
             }
 
-            const user = new User();
-            user.firstName = firstName;
-            user.lastName = lastName;
-            user.email = email;
-            return await this._repository.save(user);
+            if (!password) {
+                throw new BadRequestException(`missing password parameter`);
+            }
+
+            const actualUser: User = Object.assign(user);
+            [actualUser.saltedPassword, actualUser.salt] = await CryptoService.createPasswordAndSalt(password);
+
+            return await this._repository.save(actualUser);
         } catch (error) {
             if (error instanceof QueryFailedError) {
                 throw new EntityConflictException(`user with that email already exist`);

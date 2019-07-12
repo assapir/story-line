@@ -62,6 +62,7 @@ describe(`Server integration tests`, () => {
                                     firstName: `Assaf`,
                                     lastName: `Sapir`,
                                     email: `not-my-mail@not-my-domain.cc`,
+                                    password: `password`,
                                 });
             const user = response.body as User;
 

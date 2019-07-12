@@ -1,4 +1,4 @@
-import { Substitute, SubstituteOf } from "@fluffy-spoon/substitute";
+import { Arg, Substitute, SubstituteOf } from "@fluffy-spoon/substitute";
 import bodyParser from "body-parser";
 import { expect } from "chai";
 import express, { Application } from "express";
@@ -11,7 +11,7 @@ import UserController from "../../src/controllers/userController";
 import BadRequestException from "../../src/exceptions/badRequestException";
 import NotFoundException from "../../src/exceptions/notFoundException";
 import Line from "../../src/models/line";
-import User from "../../src/models/user";
+import User, { IUser } from "../../src/models/user";
 import UserService from "../../src/services/userService";
 
 describe(`UserController`, () => {
@@ -209,7 +209,8 @@ describe(`UserController`, () => {
             user1.lastName = faker.name.lastName();
             user1.email = faker.internet.email();
 
-            userService.createUser(user1.firstName, user1.lastName, user1.email).returns(Promise.resolve(user1));
+            userService.createUser(Arg.is((iUser) => iUser), `password`)
+                .returns(Promise.resolve(user1));
 
             const result = await request
                 .post(`${usersPath}/`)
@@ -218,6 +219,7 @@ describe(`UserController`, () => {
                     firstName: user1.firstName,
                     lastName: user1.lastName,
                     email: user1.email,
+                    password: `password`,
                 });
 
             expect(result.status).to.equal(201);
@@ -231,13 +233,14 @@ describe(`UserController`, () => {
         });
 
         it(`should return error if error thrown in the service`, async () => {
-            userService.createUser(user.firstName, user.lastName, user.email)
+            userService.createUser(Arg.is((iUser) => iUser), `password`)
                 .returns(Promise.reject(new BadRequestException(`missing firstName parameter`)));
 
             const result = await request.post(`${usersPath}/`).type(`form`).send({
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
+                password: `password`,
             });
             expect(result.status).to.equal(400);
             expect(result.body).to.deep.equal({ error: `missing firstName parameter` });

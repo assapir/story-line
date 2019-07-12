@@ -49,6 +49,8 @@ export async function seedUser(queryRunner: QueryRunner): Promise<User> {
     user.firstName = faker.name.firstName();
     user.lastName = faker.name.lastName();
     user.email = faker.internet.email(user.firstName, user.lastName);
+    user.salt = Buffer.from(`Hello World`).toString(`base64`);
+    user.saltedPassword = Buffer.from(`veryImportantPassword`).toString(`base64`);
     const result = await userRepository.save(user);
     return result;
 }

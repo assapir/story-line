@@ -70,7 +70,12 @@ class UserController {
                 throw new BadRequestException(`email parameter missing`);
             }
 
-            const result = await this._service.createUser(firstName, lastName, email);
+            const password = req.body.password;
+            if (!password) {
+                throw new BadRequestException(`password parameter missing`);
+            }
+
+            const result = await this._service.createUser({firstName, lastName, email}, password);
             sendResult(res, result, HttpStatus.CREATED);
         } catch (error) {
             next(error);

@@ -1,4 +1,4 @@
-import { assert, expect } from "chai";
+import { expect } from "chai";
 import faker from "faker";
 import { after, before, beforeEach, describe, it } from "mocha";
 import { Connection, createConnection, Repository } from "typeorm";
@@ -8,7 +8,7 @@ import NotAllowedException from "../../src/exceptions/notAllowedException";
 import NotFoundException from "../../src/exceptions/notFoundException";
 import Line from "../../src/models/line";
 import Story from "../../src/models/story";
-import User from "../../src/models/user";
+import User, { IUser } from "../../src/models/user";
 import UserService from "../../src/services/userService";
 import { failIfReached, seedDatabase, seedUser } from "../testHelper";
 
@@ -139,7 +139,13 @@ describe(`UserService`, () => {
         describe(`createUser`, () => {
             it(`should throw if firstName is missing`, async () => {
                 try {
-                    await service.createUser(``, `niceName`, `email@email.com`);
+                    const user = {
+                        firstName: ``,
+                        lastName: `niceName`,
+                        email: `email@email.com`,
+                    };
+
+                    await service.createUser(user, `password`);
                     failIfReached();
                 } catch (error) {
                     expect(error).to.be.instanceOf(BadRequestException);
@@ -149,7 +155,12 @@ describe(`UserService`, () => {
 
             it(`should throw if lastName is missing`, async () => {
                 try {
-                    await service.createUser(`niceName`, ``, `email@email.com`);
+                    const user = {
+                        firstName: `niceName`,
+                        lastName: ``,
+                        email: `email@email.com`,
+                    };
+                    await service.createUser(user, `password`);
                     failIfReached();
                 } catch (error) {
                     expect(error).to.be.instanceOf(BadRequestException);
@@ -159,7 +170,12 @@ describe(`UserService`, () => {
 
             it(`should throw if email is missing`, async () => {
                 try {
-                    await service.createUser(`niceName`, `nice second name`, ``);
+                    const user = {
+                        firstName: `niceName`,
+                        lastName: `nice second name`,
+                        email: ``,
+                    };
+                    await service.createUser(user, `password`);
                     failIfReached();
                 } catch (error) {
                     expect(error).to.be.instanceOf(BadRequestException);
@@ -167,9 +183,30 @@ describe(`UserService`, () => {
                 }
             });
 
+            it(`should throw if password is missing`, async () => {
+                try {
+                    const user = {
+                        firstName: `niceName`,
+                        lastName: `nice second name`,
+                        email: `email@email.com`,
+                    };
+                    await service.createUser(user, ``);
+                    failIfReached();
+                } catch (error) {
+                    expect(error).to.be.instanceOf(BadRequestException);
+                    expect(error.message).to.be.equal(`missing password parameter`);
+                }
+            });
+
             it(`should throw if the email already in DB`, async () => {
                 try {
-                    await service.createUser(`niceName`, `nice second name`, users[0].email);
+                    const user = {
+                        firstName: `niceName`,
+                        lastName: `nice second name`,
+                        email: users[0].email,
+                    };
+
+                    await service.createUser(user, `password`);
                     failIfReached();
                 } catch (error) {
                     expect(error).to.be.instanceOf(EntityConflictException);
@@ -179,7 +216,13 @@ describe(`UserService`, () => {
 
             it(`should throw if the email isn't valid email`, async () => {
                 try {
-                    await service.createUser(`niceName`, `nice second name`, `not-an-email`);
+                    const user = {
+                        firstName: `niceName`,
+                        lastName: `nice second name`,
+                        email: `not-an-email`,
+                    };
+
+                    await service.createUser(user, `password`);
                     failIfReached();
                 } catch (error) {
                     expect(error).to.be.instanceOf(BadRequestException);
@@ -188,16 +231,16 @@ describe(`UserService`, () => {
             });
 
             it(`should create a new user in the db DB`, async () => {
-                const firstName = faker.name.firstName();
-                const lastName = faker.name.lastName();
-                const email = faker.internet.email(firstName, lastName);
-                const result = await service.createUser(firstName,
-                    lastName,
-                    email);
-                expect(result).to.be.instanceOf(User);
-                expect(result.firstName).to.equal(firstName);
-                expect(result.lastName).to.equal(lastName);
-                expect(result.email).to.equal(email);
+                const user: IUser = {
+                    firstName: faker.name.firstName(),
+                    lastName: faker.name.lastName(),
+                    email: faker.internet.email(``),
+                };
+
+                const result = await service.createUser(user, `password`);
+                expect(result.firstName).to.equal(user.firstName);
+                expect(result.lastName).to.equal(user.lastName);
+                expect(result.email).to.equal(user.email);
             });
         });
 
