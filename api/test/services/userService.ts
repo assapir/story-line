@@ -8,7 +8,7 @@ import NotAllowedException from "../../src/exceptions/notAllowedException";
 import NotFoundException from "../../src/exceptions/notFoundException";
 import Line from "../../src/models/line";
 import Story from "../../src/models/story";
-import User, { IUser } from "../../src/models/user";
+import User, { IUser, Role } from "../../src/models/user";
 import UserService from "../../src/services/userService";
 import { failIfReached, seedDatabase, seedUser } from "../testHelper";
 
@@ -44,6 +44,18 @@ describe(`UserService`, () => {
                 } catch (error) {
                     expect(error).to.be.instanceOf(NotFoundException);
                     expect(error.message).to.equal(`Unable to find user with id 'not existing Id'`);
+                }
+            });
+        });
+
+        describe(`getUserByEmail`, () => {
+            it(`should throw NotFoundException`, async () => {
+                try {
+                    await service.getUserByEmail(`not existing email`);
+                    failIfReached();
+                } catch (error) {
+                    expect(error).to.be.instanceOf(NotFoundException);
+                    expect(error.message).to.equal(`Unable to find user with email 'not existing email'`);
                 }
             });
         });
@@ -87,6 +99,8 @@ describe(`UserService`, () => {
                 expect(firstUser.firstName).to.deep.equal(users[0].firstName);
                 expect(firstUser.lastName).to.deep.equal(users[0].lastName);
                 expect(firstUser.email).to.deep.equal(users[0].email);
+                expect(firstUser.role).to.deep.equal(users[0].role);
+                expect(firstUser).not.to.have.property(`password`);
                 expect(firstUser.lines.length).to.equal(lines.length);
                 const lineIds = firstUser.lines.map((l) => l.id);
                 expect(lineIds).to.contain(lines[0].id);
@@ -98,6 +112,8 @@ describe(`UserService`, () => {
                 expect(secondUser.firstName).to.deep.equal(users[1].firstName);
                 expect(secondUser.lastName).to.deep.equal(users[1].lastName);
                 expect(secondUser.email).to.deep.equal(users[1].email);
+                expect(secondUser.role).to.deep.equal(users[1].role);
+                expect(secondUser).not.to.have.property(`password`);
                 expect(secondUser.lines.length).to.equal(0);
             });
         });
@@ -129,6 +145,44 @@ describe(`UserService`, () => {
                 expect(result.firstName).to.equal(users[0].firstName);
                 expect(result.lastName).to.equal(users[0].lastName);
                 expect(result.email).to.equal(users[0].email);
+                expect(result.role).to.deep.equal(users[0].role);
+                expect(result).not.to.have.property(`password`);
+                expect(result.lines.length).to.equal(2);
+                const lineIds = result.lines.map((l) => l.id);
+                expect(lineIds).to.contain(lines[0].id);
+                expect(lineIds).to.contain(lines[1].id);
+            });
+        });
+
+        describe(`getUserByEmail`, () => {
+            it(`should throw if the 'email' parameter wasn't supplied`, async () => {
+                try {
+                    await service.getUserByEmail(``);
+                    failIfReached();
+                } catch (error) {
+                    expect(error).to.be.instanceOf(BadRequestException);
+                    expect(error.message).to.be.equal(`missing email parameter`);
+                }
+            });
+
+            it(`should throw if id is not in the DB`, async () => {
+                try {
+                    await service.getUserByEmail(`not-in-db-id`);
+                    failIfReached();
+                } catch (error) {
+                    expect(error).to.be.instanceOf(NotFoundException);
+                    expect(error.message).to.be.equal(`Unable to find user with email 'not-in-db-id'`);
+                }
+            });
+
+            it(`should return the correct user matching email parameter`, async () => {
+                const result = await service.getUserByEmail(users[0].email);
+                expect(result.id).to.equal(users[0].id);
+                expect(result.firstName).to.equal(users[0].firstName);
+                expect(result.lastName).to.equal(users[0].lastName);
+                expect(result.email).to.equal(users[0].email);
+                expect(result.role).to.deep.equal(users[0].role);
+                expect(result).not.to.have.property(`password`);
                 expect(result.lines.length).to.equal(2);
                 const lineIds = result.lines.map((l) => l.id);
                 expect(lineIds).to.contain(lines[0].id);
@@ -241,6 +295,9 @@ describe(`UserService`, () => {
                 expect(result.firstName).to.equal(user.firstName);
                 expect(result.lastName).to.equal(user.lastName);
                 expect(result.email).to.equal(user.email);
+                expect(result.role).to.equal(Role.USER);
+                expect(result).to.have.property(`id`);
+                expect(result).to.not.have.property(`password`);
             });
         });
 
@@ -349,15 +406,19 @@ describe(`UserService`, () => {
                 const firstName = faker.name.firstName();
                 const lastName = faker.name.lastName();
                 const email = faker.internet.email();
+                const role = Role.ADMIN;
                 const result = await service.updateUser(users[0].id,
                                                         firstName,
                                                         lastName,
-                                                        email);
+                                                        email,
+                                                        role);
 
                 expect(result.id).to.equal(users[0].id);
                 expect(result.firstName).to.equal(firstName);
                 expect(result.lastName).to.equal(lastName);
                 expect(result.email).to.equal(email);
+                expect(result.role).to.deep.equal(role);
+                expect(result).not.to.have.property(`password`);
                 expect(result.lines.length).to.equal(2);
             });
 
@@ -369,6 +430,8 @@ describe(`UserService`, () => {
                 expect(result.firstName).to.equal(firstName);
                 expect(result.lastName).to.equal(users[0].lastName);
                 expect(result.email).to.equal(users[0].email);
+                expect(result.role).to.deep.equal(users[0].role);
+                expect(result).not.to.have.property(`password`);
                 expect(result.lines.length).to.equal(2);
             });
 
@@ -380,6 +443,8 @@ describe(`UserService`, () => {
                 expect(result.firstName).to.equal(users[0].firstName);
                 expect(result.lastName).to.equal(lastName);
                 expect(result.email).to.equal(users[0].email);
+                expect(result.role).to.deep.equal(users[0].role);
+                expect(result).not.to.have.property(`password`);
                 expect(result.lines.length).to.equal(2);
             });
 
@@ -391,6 +456,20 @@ describe(`UserService`, () => {
                 expect(result.firstName).to.equal(users[0].firstName);
                 expect(result.lastName).to.equal(users[0].lastName);
                 expect(result.email).to.equal(email);
+                expect(result.role).to.deep.equal(users[0].role);
+                expect(result).not.to.have.property(`password`);
+                expect(result.lines.length).to.equal(2);
+            });
+
+            it(`should update only the role parameter`, async () => {
+                const result = await service.updateUser(users[0].id, ``, ``, undefined, Role.ADMIN);
+
+                expect(result.id).to.equal(users[0].id);
+                expect(result.firstName).to.equal(users[0].firstName);
+                expect(result.lastName).to.equal(users[0].lastName);
+                expect(result.email).to.equal(users[0].email);
+                expect(result.role).to.deep.equal(Role.ADMIN);
+                expect(result).not.to.have.property(`password`);
                 expect(result.lines.length).to.equal(2);
             });
         });

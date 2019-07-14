@@ -4,11 +4,12 @@ import BadRequestException from "../exceptions/badRequestException";
 import EntityConflictException from "../exceptions/entityConflictException";
 import NotAllowedException from "../exceptions/notAllowedException";
 import NotFoundException from "../exceptions/notFoundException";
-import User, { IUser } from "../models/user";
+import User, { IUser, Role } from "../models/user";
 import CryptoService from "./cryptoService";
 
 export default class UserService {
     private readonly _repository: Repository<User>;
+    private returnSelect: Array<keyof User> = [`id`, `firstName`, `lastName`, `email`, `role`];
 
     constructor(repository: Repository<User>) {
         this._repository = repository;
@@ -19,7 +20,10 @@ export default class UserService {
             throw new BadRequestException(`missing id parameter`);
         }
 
-        const user = await this._repository.findOne(id);
+        const user = await this._repository.findOne(id, {
+            select: this.returnSelect,
+            relations: [`lines`],
+        });
         if (!user) {
             throw new NotFoundException(`Unable to find user with id '${id}'`);
         }
@@ -27,8 +31,27 @@ export default class UserService {
         return user;
     }
 
+    public async getUserByEmail(email: string): Promise<User> {
+        if (!email) {
+            throw new BadRequestException(`missing email parameter`);
+        }
+        const user = await this._repository.findOne({
+            select: this.returnSelect,
+            where: { email },
+            relations: [`lines`],
+        });
+        if (!user) {
+            throw new NotFoundException(`Unable to find user with email '${email}'`);
+        }
+
+        return user;
+    }
+
     public async getAllUsers(): Promise<User[]> {
-        const users = await this._repository.find();
+        const users = await this._repository.find({
+            select: this.returnSelect,
+            relations: [`lines`],
+         });
         if (!users || users.length === 0) {
             throw new NotFoundException(`No users found`);
         }
@@ -36,7 +59,7 @@ export default class UserService {
         return users;
     }
 
-    public async createUser(user: IUser, password: string): Promise<IUser> {
+    public async createUser(user: IUser, password: string): Promise<User> {
         try {
             if (!user.firstName) {
                 throw new BadRequestException(`missing firstName parameter`);
@@ -58,10 +81,12 @@ export default class UserService {
                 throw new BadRequestException(`missing password parameter`);
             }
 
-            const actualUser: User = Object.assign(user);
-            actualUser.password = await CryptoService.createPassword(password);
+            const actualUser: User = JSON.parse(JSON.stringify(user)); // copy the properties
+            actualUser.password = await new CryptoService().createPassword(password);
 
-            return await this._repository.save(actualUser);
+            const result = await this._repository.save(actualUser);
+            delete result.password; // make sure to do not return the password
+            return result;
         } catch (error) {
             if (error instanceof QueryFailedError) {
                 throw new EntityConflictException(`user with that email already exist`);
@@ -76,7 +101,10 @@ export default class UserService {
             if (!id) {
                 throw new BadRequestException(`missing id parameter`);
             }
-            const user = await this._repository.findOne(id);
+            const user = await this._repository.findOne(id, {
+                select: this.returnSelect,
+                relations: [`lines`],
+            });
             if (!user) {
                 throw new NotFoundException(`Unable to find user with id '${id}'`);
             }
@@ -90,16 +118,25 @@ export default class UserService {
         }
     }
 
-    public async updateUser(id: string, firstName: string, lastName: string, email: string): Promise<User> {
+    public async updateUser(
+        id: string,
+        firstName?: string,
+        lastName?: string,
+        email?: string,
+        role?: Role,
+    ): Promise<User> {
         if (!id) {
             throw new BadRequestException(`missing id parameter`);
         }
 
-        if (!firstName && !lastName && !email) {
+        if (!firstName && !lastName && !email && !role) {
             throw new BadRequestException(`no parameters to update`);
         }
 
-        const user = await this._repository.findOne(id);
+        const user = await this._repository.findOne(id, {
+            select: this.returnSelect,
+            relations: [`lines`],
+        });
         if (!user) {
             throw new NotFoundException(`Unable to find user with id '${id}'`);
         }
@@ -122,6 +159,10 @@ export default class UserService {
 
         if (lastName) {
             user.lastName = lastName;
+        }
+
+        if (role) {
+            user.role = role;
         }
 
         const result = await this._repository.save(user);

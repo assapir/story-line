@@ -7,6 +7,11 @@ export interface IUser {
     email: string;
 }
 
+export enum Role {
+    USER = 0,
+    ADMIN = 1,
+}
+
 @Entity()
 export default class User implements IUser {
     @PrimaryGeneratedColumn(`uuid`)
@@ -24,6 +29,9 @@ export default class User implements IUser {
 
     @Column({ nullable: false })
     public password: string;
+
+    @Column({ nullable: false, default: Role.USER, type: Number })
+    public role: Role;
 
     @OneToMany((type) => Line, (line) => line.user, {
         eager: true,

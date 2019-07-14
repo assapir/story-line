@@ -43,8 +43,8 @@ class UserController {
      */
     public async getUser(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const line = await this._service.getUser(req.params.id);
-            sendResult(res, line);
+            const user = await this._service.getUser(req.params.id);
+            sendResult(res, user);
         } catch (error) {
             next(error);
         }
@@ -102,7 +102,8 @@ class UserController {
             const result = await this._service.updateUser(req.params.id,
                                                           req.body.firstName,
                                                           req.body.lastName,
-                                                          req.body.email);
+                                                          req.body.email,
+                                                          req.body.role);
             sendResult(res, result);
         } catch (error) {
             next(error);

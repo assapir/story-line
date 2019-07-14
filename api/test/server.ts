@@ -99,12 +99,6 @@ describe(`Server integration tests`, () => {
             const fullStory = response.body as Story;
             expect(fullStory.lines[0]).to.deep.equal(firstLine);
             expect(fullStory.lines[1]).to.deep.equal(secondLine);
-
-            response = await request
-                             .get(`${usersPath}/${user.id}`);
-            const fullUser = response.body as User;
-            expect(fullUser.lines[0]).to.deep.equal(firstLine);
-            expect(fullUser.lines[1]).to.deep.equal(secondLine);
         });
     });
 });

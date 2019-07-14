@@ -6,7 +6,7 @@ import faker from "faker";
 import { beforeEach, describe, it } from "mocha";
 import supertest from "supertest";
 import { usersPath } from "../../src/consts";
-import errorHandlerController from "../../src/controllers/errorHandlerController";
+import ErrorHandlerController from "../../src/controllers/errorHandlerController";
 import UserController from "../../src/controllers/userController";
 import BadRequestException from "../../src/exceptions/badRequestException";
 import NotFoundException from "../../src/exceptions/notFoundException";
@@ -31,18 +31,19 @@ describe(`UserController`, () => {
         user.firstName = faker.name.firstName();
         user.lastName = faker.name.lastName();
         user.email = faker.internet.email();
+        user.password = faker.random.words();
         user.lines = [line, line1];
 
         userService = Substitute.for<UserService>();
         app = express();
         app.use(bodyParser.urlencoded({ extended: true }));
         UserController(app, userService);
-        errorHandlerController(app);
+        ErrorHandlerController(app);
         request = supertest(app);
     });
 
     describe(`GET /`, () => {
-        it(`should call UserService.getAllLines and return it as an array`, async () => {
+        it(`should call UserService.getAllUsers and return it as an array`, async () => {
             const user1 = new User();
             user1.id = faker.random.uuid();
             user1.firstName = faker.name.firstName();
@@ -62,6 +63,7 @@ describe(`UserController`, () => {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
+                password: user.password,
                 lines: [line, line1],
             });
 
@@ -94,6 +96,7 @@ describe(`UserController`, () => {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
+                password: user.password,
                 lines: [line, line1],
             });
         });
@@ -169,6 +172,7 @@ describe(`UserController`, () => {
                     .send({
                         lastName: user.lastName,
                         email: user.email,
+                        password: user.password,
                     });
 
                 expect(result.status).to.equal(400);
@@ -182,6 +186,7 @@ describe(`UserController`, () => {
                     .send({
                         firstName: user.firstName,
                         email: user.email,
+                        password: user.password,
                     });
 
                 expect(result.status).to.equal(400);
@@ -195,10 +200,25 @@ describe(`UserController`, () => {
                     .send({
                         firstName: user.firstName,
                         lastName: user.lastName,
+                        password: user.password,
                     });
 
                 expect(result.status).to.equal(400);
                 expect(result.body.error).to.equal(`email parameter missing`);
+            });
+
+            it(`should throw if password is missing`, async () => {
+                const result = await request
+                    .post(`${usersPath}/`)
+                    .type(`form`)
+                    .send({
+                        firstName: user.firstName,
+                        lastName: user.lastName,
+                        email: user.email,
+                    });
+
+                expect(result.status).to.equal(400);
+                expect(result.body.error).to.equal(`password parameter missing`);
             });
         });
 
