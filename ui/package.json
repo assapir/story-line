@@ -36,7 +36,7 @@
     ]
   },
   "devDependencies": {
-    "coveralls": "^3.0.4",
+    "coveralls": "^3.0.5",
     "tslint": "^5.18.0"
   }
 }
