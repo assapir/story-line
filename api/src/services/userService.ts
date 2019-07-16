@@ -81,8 +81,11 @@ export default class UserService {
                 throw new BadRequestException(`missing password parameter`);
             }
 
-            const actualUser: User = JSON.parse(JSON.stringify(user)); // copy the properties
-            actualUser.password = await new CryptoService().createPassword(password);
+            const actualUser = new User(); // copy to concrete object
+            actualUser.firstName = user.firstName;
+            actualUser.lastName = user.lastName;
+            actualUser.email = user.email;
+            await actualUser.createOrUpdatePassword(password);
 
             const result = await this._repository.save(actualUser);
             delete result.password; // make sure to do not return the password

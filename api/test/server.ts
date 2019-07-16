@@ -65,6 +65,7 @@ describe(`Server integration tests`, () => {
                                     password: `password`,
                                 });
             const user = response.body as User;
+            expect(user).to.not.have.property(`error`);
 
             response = await request
                              .post(`${storiesPath}/`)
@@ -73,6 +74,7 @@ describe(`Server integration tests`, () => {
                                 name: `a real story`,
                              });
             const story = response.body as Story;
+            expect(story).to.not.have.property(`error`);
 
             response = await request
                              .post(`${linesPath}/`)
@@ -83,6 +85,7 @@ describe(`Server integration tests`, () => {
                                 userId: user.id,
                              });
             const firstLine = response.body as Line;
+            expect(firstLine).to.not.have.property(`error`);
 
             response = await request
                              .post(`${linesPath}/`)
@@ -93,6 +96,7 @@ describe(`Server integration tests`, () => {
                                 userId: user.id,
                              });
             const secondLine = response.body as Line;
+            expect(secondLine).to.not.have.property(`error`);
 
             response = await request
                              .get(`${storiesPath}/${story.id}`);

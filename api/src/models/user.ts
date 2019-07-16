@@ -1,3 +1,4 @@
+import argon2 from "argon2";
 import { Column, Entity, Index, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import Line from "./line";
 
@@ -37,4 +38,13 @@ export default class User implements IUser {
         eager: true,
     })
     public lines: Line[];
+
+    public async createOrUpdatePassword(password: string): Promise<void> {
+        const encrypted = await argon2.hash(password);
+        this.password = encrypted;
+    }
+
+    public async isPasswordCorrect(passwordAttempt: string): Promise<boolean> {
+        return await argon2.verify(this.password, passwordAttempt);
+    }
 }

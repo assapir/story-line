@@ -1,4 +1,4 @@
-import { Substitute, SubstituteOf } from "@fluffy-spoon/substitute";
+import { Arg, Substitute, SubstituteOf } from "@fluffy-spoon/substitute";
 import bodyParser from "body-parser";
 import { expect } from "chai";
 import express, { Application } from "express";
@@ -70,18 +70,16 @@ describe(`AuthController`, () => {
         });
 
         it(`should return error if password is incorrect`, async () => {
-            const user = new User();
-            user.id = faker.random.uuid();
-            user.email = faker.internet.email();
-            user.password = faker.random.word();
-            userService.getUserByEmail(user.email).returns(Promise.resolve(user));
-            cryptoService.isPasswordCorrect(user.password, `wowWhatAPassword`).returns(Promise.resolve(false));
+            const email = faker.internet.email();
+            const user = Substitute.for<User>();
+            user.isPasswordCorrect(`wowWhatAPassword`).returns(Promise.resolve(false));
+            userService.getUserByEmail(email).returns(Promise.resolve(user));
 
             const result = await request
                 .post(`/login`)
                 .type(`form`)
                 .send({
-                    email: user.email,
+                    email,
                     password: `wowWhatAPassword`,
                 });
 
@@ -90,24 +88,23 @@ describe(`AuthController`, () => {
         });
 
         it(`should return JWT token if password is correct`, async () => {
-            const user = new User();
-            user.id = faker.random.uuid();
-            user.email = faker.internet.email();
-            user.password = faker.random.word();
-            userService.getUserByEmail(user.email).returns(Promise.resolve(user));
-            cryptoService.isPasswordCorrect(user.password, user.password).returns(Promise.resolve(true));
+            const email = faker.internet.email();
+            const user = Substitute.for<User>();
+            user.isPasswordCorrect(`password`).returns(Promise.resolve(true));
+            userService.getUserByEmail(email).returns(Promise.resolve(user));
             cryptoService.signJWT(user).mimicks(new CryptoService().signJWT);
 
             const result = await request
                 .post(`/login`)
                 .type(`form`)
                 .send({
-                    email: user.email,
-                    password: user.password,
+                    email,
+                    password: `password`,
                 });
 
             expect(result.status).to.equal(200);
-            expect(result.body).to.have.lengthOf.above(200);
+            const split = result.body.split(`.`);
+            expect(split).to.have.lengthOf(3);
         });
     });
 });

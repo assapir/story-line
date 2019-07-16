@@ -23,7 +23,7 @@ class AuthController {
                 throw new BadRequestException(`no password and no user email given`);
             }
             const user = await this._userService.getUserByEmail(email);
-            const isCorrect = await this._cryptoService.isPasswordCorrect(user.password, password);
+            const isCorrect = await user.isPasswordCorrect(password);
             if (!isCorrect) {
                 throw new unauthorizedException(`password is incorrect`);
             }
