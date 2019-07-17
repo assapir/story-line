@@ -12,10 +12,10 @@ dist: xenial
 
 before_script:
   - npm install
-  - lerna exec npm install
+  - npx lerna bootstrap
 
 script:
-  - lerna run test:ci
+  - npx lerna run --stream --concurrency=1 test:ci
 
 notifications:
   email: false
