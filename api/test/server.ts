@@ -14,7 +14,8 @@ describe(`Server integration tests`, () => {
     let connection: Connection;
     let server: Server;
 
-    before(async () => {
+    before(async function() {
+        this.timeout(10000);
         process.env.NODE_ENV = `test`; // for using test in memory DB
         server = await startServer();
     });
@@ -23,7 +24,9 @@ describe(`Server integration tests`, () => {
         if (connection && connection.isConnected) {
             await connection.close();
         }
-        await server.close(); // close the server after we finish the tests
+        if (server) {
+            await server.close(); // close the server after we finish the tests
+        }
     });
 
     let request: supertest.SuperTest<supertest.Test>;
