@@ -15,7 +15,7 @@ before_script:
   - npx lerna bootstrap
 
 script:
-  - npx lerna run --stream --concurrency=1 test:ci
+  - npx lerna run --stream test:ci
 
 notifications:
   email: false
