@@ -14,7 +14,8 @@ describe(`Server integration tests`, () => {
     let connection: Connection;
     let server: Server;
 
-    before(async () => {
+    before(async function() {
+        this.timeout(10000);
         process.env.NODE_ENV = `test`; // for using test in memory DB
         server = await startServer();
     });
