@@ -31,10 +31,8 @@ class ErrorHandlerController {
     }
 
     private initializeRouter(app: Application) {
-        app.use((req: Request, res: Response, next: NextFunction) => this.NotFoundError(req, res, next));
-        app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-            this.InternalError(err, req, res, next);
-        });
+        app.use(this.NotFoundError.bind(this));
+        app.use(this.InternalError.bind(this));
     }
 }
 

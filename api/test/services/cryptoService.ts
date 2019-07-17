@@ -1,6 +1,7 @@
 import { expect } from "chai";
 import faker from "faker";
 import { beforeEach, describe, it } from "mocha";
+import UnauthorizedException from "../../src/exceptions/unauthorizedException";
 import User from "../../src/models/user";
 import CryptoService from "../../src/services/cryptoService";
 
@@ -12,6 +13,25 @@ describe(`CryptoService`, () => {
     });
 
     describe(`signJWT`, () => {
+        it(`should throw if the payload is invalid`, () => {
+            const payLoad = {
+                id: faker.random.uuid(),
+                email: faker.internet.email(),
+                isValid: false,
+            };
+
+            expect(() => cryptoService.signJWT(payLoad)).to.throw(UnauthorizedException);
+        });
+
+        it(`should not throw if isValid wasn't supplied`, () => {
+            const payLoad = {
+                id: faker.random.uuid(),
+                email: faker.internet.email(),
+            };
+
+            expect(() => cryptoService.signJWT(payLoad)).to.not.throw(UnauthorizedException);
+        });
+
         it(`should return a signed token`, () => {
             const user = new User();
             user.id = faker.random.uuid();
@@ -39,8 +59,11 @@ describe(`CryptoService`, () => {
             user.email = faker.internet.email();
 
             const token = cryptoService.signJWT(user);
+            const result = cryptoService.verifyJWT(token);
             // tslint:disable-next-line: no-unused-expression
-            expect(cryptoService.verifyJWT(token)).to.be.true;
+            expect(result.isValid).to.be.true;
+            expect(result.id).to.be.equal(user.id);
+            expect(result.email).to.be.equal(user.email);
         });
 
         it(`should get an invalid token and return false`, () => {
@@ -50,8 +73,13 @@ describe(`CryptoService`, () => {
 
             let token = cryptoService.signJWT(user);
             token = token + `blipBlip==`; // now it's not a valid token
+            const result = cryptoService.verifyJWT(token);
             // tslint:disable-next-line: no-unused-expression
-            expect(cryptoService.verifyJWT(token)).to.be.false;
+            expect(result.isValid).to.be.false;
+            // tslint:disable-next-line: no-unused-expression
+            expect(result.email).to.be.empty;
+            // tslint:disable-next-line: no-unused-expression
+            expect(result.id).to.be.empty;
         });
 
         it(`should get an expired token and return false`, () => {
@@ -66,7 +94,13 @@ describe(`CryptoService`, () => {
             split[1] = Buffer.from(JSON.stringify(payload)).toString(`base64`);
             token = split.join(`.`);
             // tslint:disable-next-line: no-unused-expression
-            expect(cryptoService.verifyJWT(token)).to.be.false;
+            const result = cryptoService.verifyJWT(token);
+            // tslint:disable-next-line: no-unused-expression
+            expect(result.isValid).to.be.false;
+            // tslint:disable-next-line: no-unused-expression
+            expect(result.email).to.be.empty;
+            // tslint:disable-next-line: no-unused-expression
+            expect(result.id).to.be.empty;
         });
     });
 });

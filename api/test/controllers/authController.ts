@@ -1,4 +1,4 @@
-import { Arg, Substitute, SubstituteOf } from "@fluffy-spoon/substitute";
+import { Substitute, SubstituteOf } from "@fluffy-spoon/substitute";
 import bodyParser from "body-parser";
 import { expect } from "chai";
 import express, { Application } from "express";
@@ -19,10 +19,10 @@ describe(`AuthController`, () => {
     let app: Application;
 
     beforeEach(() => {
-        app = express();
-        app.use(bodyParser.urlencoded({ extended: true }));
         userService = Substitute.for<UserService>();
         cryptoService = Substitute.for<CryptoService>();
+        app = express();
+        app.use(bodyParser.urlencoded({ extended: true }));
         AuthController(app, userService, cryptoService);
         ErrorHandlerController(app);
         request = supertest(app);
@@ -92,7 +92,8 @@ describe(`AuthController`, () => {
             const user = Substitute.for<User>();
             user.isPasswordCorrect(`password`).returns(Promise.resolve(true));
             userService.getUserByEmail(email).returns(Promise.resolve(user));
-            cryptoService.signJWT(user).mimicks(new CryptoService().signJWT);
+            cryptoService.signJWT({isValid: true, email: user.email, id: user.id})
+                .mimicks(new CryptoService().signJWT);
 
             const result = await request
                 .post(`/login`)

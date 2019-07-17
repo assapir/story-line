@@ -1,6 +1,12 @@
 import * as jwt from "jsonwebtoken";
 import { config } from "../consts";
-import User from "../models/user";
+import UnauthorizedException from "../exceptions/unauthorizedException";
+
+export interface IPayLoad {
+    isValid?: boolean;
+    email: string;
+    id: string;
+}
 
 export default class CryptoService {
     // for production, get it from environment variable
@@ -8,11 +14,15 @@ export default class CryptoService {
                                 config.jwtSecret :
                                 process.env.JWT_SECRET;
 
-    public signJWT(user: User): string {
+    public signJWT(payload: IPayLoad): string {
+        // throw if the payload is invalid
+        if (payload.isValid !== undefined && !payload.isValid) {
+            throw new UnauthorizedException(`payload is invalid`);
+        }
         const token = jwt.sign(
             {
-                userId: user.id,
-                email: user.email,
+                userId: payload.id,
+                email: payload.email,
             },
             CryptoService.jwtSecret,
             {
@@ -22,12 +32,20 @@ export default class CryptoService {
         return token;
     }
 
-    public verifyJWT(token: string): boolean {
+    public verifyJWT(token: string): IPayLoad {
         try {
-            jwt.verify(token, config.jwtSecret);
-            return true;
+            const payload = jwt.verify(token, CryptoService.jwtSecret);
+            return {
+                isValid: true,
+                email: payload[`email`],
+                id: payload[`userId`],
+            };
         } catch (error) {
-            return false;
+            return {
+                isValid: false,
+                email: ``,
+                id: ``,
+            };
         }
     }
 }

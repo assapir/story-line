@@ -16,7 +16,7 @@ class AuthController {
         this._cryptoService = cryptoService;
     }
 
-    public async Login(req: Request, res: Response, next: NextFunction): Promise<void> {
+    public async login(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const { email, password } = req.body;
             if (!email || !password) {
@@ -28,7 +28,11 @@ class AuthController {
                 throw new unauthorizedException(`password is incorrect`);
             }
 
-            const token = this._cryptoService.signJWT(user);
+            const token = this._cryptoService.signJWT({
+                id: user.id,
+                email: user.email,
+                isValid: true});
+
             sendResult(res, token);
         } catch (error) {
             // we want to always return this error
@@ -38,7 +42,7 @@ class AuthController {
 
     private initializeRouter(app: Application): void {
         const router = Router();
-        router.post(`/login`, this.Login.bind(this));
+        router.post(`/login`, this.login.bind(this));
         app.use(router);
     }
 }
