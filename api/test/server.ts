@@ -23,7 +23,9 @@ describe(`Server integration tests`, () => {
         if (connection && connection.isConnected) {
             await connection.close();
         }
-        await server.close(); // close the server after we finish the tests
+        if (server) {
+            await server.close(); // close the server after we finish the tests
+        }
     });
 
     let request: supertest.SuperTest<supertest.Test>;
