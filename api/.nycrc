@@ -12,7 +12,8 @@
     "reporter": [
         "text",
         "html",
-        "lcovonly"
+        "lcovonly",
+        "json"
     ],
     "require": [
       "ts-node/register"

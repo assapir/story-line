@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es6",
+        "noImplicitAny": false,
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "resolveJsonModule": true,
+        "outDir": "."
+    },
+    "include": [
+        "*.ts",
+        "*.json"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}
