@@ -3,9 +3,9 @@ import { config } from "../consts";
 import UnauthorizedException from "../exceptions/unauthorizedException";
 
 export interface IPayLoad {
-    isValid?: boolean;
-    email: string;
     id: string;
+    isValid: boolean;
+    email: string;
 }
 
 export default class CryptoService {
@@ -16,9 +16,10 @@ export default class CryptoService {
 
     public signJWT(payload: IPayLoad): string {
         // throw if the payload is invalid
-        if (payload.isValid !== undefined && !payload.isValid) {
+        if (!payload.isValid) {
             throw new UnauthorizedException(`payload is invalid`);
         }
+
         const token = jwt.sign(
             {
                 userId: payload.id,

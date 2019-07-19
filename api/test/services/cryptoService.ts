@@ -23,21 +23,12 @@ describe(`CryptoService`, () => {
             expect(() => cryptoService.signJWT(payLoad)).to.throw(UnauthorizedException);
         });
 
-        it(`should not throw if isValid wasn't supplied`, () => {
-            const payLoad = {
-                id: faker.random.uuid(),
-                email: faker.internet.email(),
-            };
-
-            expect(() => cryptoService.signJWT(payLoad)).to.not.throw(UnauthorizedException);
-        });
-
         it(`should return a signed token`, () => {
             const user = new User();
             user.id = faker.random.uuid();
             user.email = faker.internet.email();
 
-            const result = cryptoService.signJWT(user);
+            const result = cryptoService.signJWT({ id: user.id, email: user.email, isValid: true });
             const split = result.split(`.`);
             expect(split).to.have.lengthOf(3);
 
@@ -58,7 +49,7 @@ describe(`CryptoService`, () => {
             user.id = faker.random.uuid();
             user.email = faker.internet.email();
 
-            const token = cryptoService.signJWT(user);
+            const token = cryptoService.signJWT({ id: user.id, email: user.email, isValid: true });
             const result = cryptoService.verifyJWT(token);
             // tslint:disable-next-line: no-unused-expression
             expect(result.isValid).to.be.true;
@@ -71,7 +62,7 @@ describe(`CryptoService`, () => {
             user.id = faker.random.uuid();
             user.email = faker.internet.email();
 
-            let token = cryptoService.signJWT(user);
+            let token = cryptoService.signJWT({ id: user.id, email: user.email, isValid: true });
             token = token + `blipBlip==`; // now it's not a valid token
             const result = cryptoService.verifyJWT(token);
             // tslint:disable-next-line: no-unused-expression
@@ -87,7 +78,7 @@ describe(`CryptoService`, () => {
             user.id = faker.random.uuid();
             user.email = faker.internet.email();
 
-            let token = cryptoService.signJWT(user);
+            let token = cryptoService.signJWT({ id: user.id, email: user.email, isValid: true });
             const split = token.split(`.`);
             const payload = JSON.parse(Buffer.from(split[1], `base64`).toString(`binary`));
             payload.iat = payload.exp;
