@@ -67,7 +67,7 @@ describe(`authMiddleware`, () => {
     });
 
     describe(`checkRole`, () => {
-        function init(payload: IPayLoad, addToken: boolean = true) {
+        function init(payload: IPayLoad, addToken: boolean = true, role: Role = Role.ADMIN) {
             cryptoService = Substitute.for<CryptoService>();
             userService = Substitute.for<UserService>();
             authMiddleware = new AuthMiddleware(cryptoService, userService);
@@ -78,7 +78,7 @@ describe(`authMiddleware`, () => {
                 }
                 next();
             });
-            app.use(authMiddleware.checkRole([Role.ADMIN]));
+            app.use(authMiddleware.checkRole(role));
             app.use((req, res) => { // will be use to verify result
                 res.sendStatus(200);
             });
@@ -140,12 +140,24 @@ describe(`authMiddleware`, () => {
             expect(result.body.error).to.equal(`user in not allowed to access '/somePath'`);
         });
 
-        it(`should call the next router if allowed`, async () => {
+        it(`should call the next router if user is admin`, async () => {
             const user = new User();
             user.id = faker.random.uuid();
             user.role = Role.ADMIN;
 
             init({ isValid: true, id: user.id, email: `` });
+            userService.getUser(user.id).returns(Promise.resolve(user));
+
+            const result = await request.get(`/somePath`);
+            expect(result.status).to.equal(200);
+        });
+
+        it(`should call the next router if user is allowed`, async () => {
+            const user = new User();
+            user.id = faker.random.uuid();
+            user.role = Role.ADMIN;
+
+            init({ isValid: true, id: user.id, email: `` }, undefined, Role.USER);
             userService.getUser(user.id).returns(Promise.resolve(user));
 
             const result = await request.get(`/somePath`);

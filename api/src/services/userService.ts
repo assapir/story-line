@@ -132,7 +132,7 @@ export default class UserService {
             throw new BadRequestException(`missing id parameter`);
         }
 
-        if (!firstName && !lastName && !email && !role) {
+        if (!firstName && !lastName && !email && role === undefined) {
             throw new BadRequestException(`no parameters to update`);
         }
 
@@ -164,7 +164,7 @@ export default class UserService {
             user.lastName = lastName;
         }
 
-        if (role) {
+        if (role !== undefined) {
             user.role = role;
         }
 

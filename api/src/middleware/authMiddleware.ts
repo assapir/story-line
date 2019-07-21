@@ -50,7 +50,7 @@ export default class AuthMiddleware {
         }
     }
 
-    public checkRole(roles: Role[]): (req: Request, res: Response, next: NextFunction) => Promise<void> {
+    public checkRole(role: Role): (req: Request, res: Response, next: NextFunction) => Promise<void> {
         return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
             try {
                 const token = res.locals.jwtPayload as IPayLoad;
@@ -75,7 +75,7 @@ export default class AuthMiddleware {
                     }
                     throw new UnauthorizedException(`user is invalid`);
                 }
-                if (roles.indexOf(user.role) === -1) {
+                if (role < user.role) {
                     throw new NotAllowedException(`user in not allowed to access '${req.path}'`);
                 }
                 next();
