@@ -8,8 +8,8 @@
     "@types/react": "16.8.22",
     "@types/react-dom": "16.8.4",
     "node-sass": "^4.12.0",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
     "react-scripts": "3.0.1",
     "typescript": "3.5.2"
   },
@@ -36,7 +36,7 @@
     ]
   },
   "devDependencies": {
-    "coveralls": "^3.0.5",
-    "tslint": "^5.18.0"
+    "coveralls": "^3.0.6",
+    "tslint": "^5.20.0"
   }
 }
