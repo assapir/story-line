@@ -3,16 +3,16 @@ kind: Deployment
 metadata:
   name: story-line-api
   labels:
-    app: story-line-api
+    app: story-line
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: story-line-api
+      app: story-line
   template:
     metadata:
       labels:
-        app: story-line-api
+        app: story-line
     spec:
       nodeSelector:
         "beta.kubernetes.io/os": linux
@@ -21,16 +21,13 @@ spec:
           image: meijin007/story-line-api
           ports:
             - containerPort: 1337
-          resources:
-            limits:
-              cpu: "900m"
-              memory: "4Mi"
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: story-line-api
 spec:
+  type: LoadBalancer
   ports:
   - port: 1337
   selector:
