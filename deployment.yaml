@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: story-line
+  name: story-line-api
   labels:
-    app: story-line
+    app: story-line-api
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: story-line
+      app: story-line-api
   template:
     metadata:
       labels:
-        app: story-line
+        app: story-line-api
     spec:
       nodeSelector:
         "beta.kubernetes.io/os": linux
@@ -29,10 +29,9 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: story-line
+  name: story-line-api
 spec:
   ports:
   - port: 1337
   selector:
-    app: story-line
----
+    app: story-line-api
