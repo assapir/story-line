@@ -1,10 +1,12 @@
 FROM node:current-alpine3.9 AS Builder
 
+LABEL maintainer="meijin007 AT gmail.com"
+
 WORKDIR /app
 
 ADD . /app
 
-RUN npm install \ 
+RUN npm install \
     && npm run build \
     && npm run test
 
