@@ -5,7 +5,7 @@ import { createConnection } from "typeorm";
 import { config } from "./consts";
 import { Router } from "./router";
 
-const port = config.port || 80;
+const port = process.env.PORT || config.port || 80;
 export const app: Express = express(); // need for tests
 
 export async function startServer(): Promise<Server> {

@@ -4,11 +4,11 @@ const config = require(__dirname + `/config/config.json`)[env];
 let entitiesPaths = [];
 let migrationsPaths = [];
 if (env === `production`) {
-    entitiesPaths = ["./lib/src/models/**/*.js"];
-    migrationsPaths = ["./lib/src/migrations/**/*.js"];
+  entitiesPaths = ["/app/models/*.js"];
+  migrationsPaths = ["/app/migrations/*.js"];
 } else {
-    entitiesPaths = ["./src/models/**/*.ts"];
-    migrationsPaths = ["./src/migrations/**/*.ts"];
+  entitiesPaths = ["./src/models/**/*.ts"];
+  migrationsPaths = ["./src/migrations/**/*.ts"];
 }
 module.exports = {
     "type": config.dialect,
