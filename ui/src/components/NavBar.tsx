@@ -1,12 +1,10 @@
-import React, { Component } from "react";
+import React from "react";
 import "./NavBar.scss";
 
-export default class NavBar extends Component {
-    public render() {
-        return (
-            <header className="common">
-                <div>Story Line</div>
-            </header>
-        );
-    }
+export default function NavBar() {
+  return (
+    <header className="common">
+      <div>Story Line</div>
+    </header>
+  );
 }

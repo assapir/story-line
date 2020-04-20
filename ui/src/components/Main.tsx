@@ -1,8 +1,6 @@
-import React, { Component } from "react";
+import React from "react";
 import "./Main.scss";
 
-export default class Main extends Component {
-    public render() {
-        return <div className="common main">something</div>;
-    }
+export default function Main() {
+    return <div className="common main">something</div>;
 }
