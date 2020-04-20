@@ -14,11 +14,19 @@ on:
 
 jobs:
   build:
+    strategy:
+      matrix:
+        node-version: [10.x, 12.x]
     runs-on: ubuntu-latest
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
-    - name: CD to API
-      run: cd api/
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Build and run tests
+      uses: ./api/
+      run: npm test
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag story-line-api:$(date +%s)
