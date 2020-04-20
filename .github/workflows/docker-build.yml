@@ -28,13 +28,14 @@ jobs:
   CD:
     name: Push Docker image to GitHub Packages
     runs-on: ubuntu-latest
+    if: success() && github.ref == 'refs/heads/master'
+
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
       - name: Set image version based on tag
         run: echo ::set-env name=TAG::$(date +%s)
       - name: Push to GitHub Packages
-        if: success() && github.ref == 'refs/heads/master'
         uses: docker/build-push-action@v1
         with:
           path: ./api/
