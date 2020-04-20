@@ -6,9 +6,8 @@ WORKDIR /app
 
 ADD . /app
 
-RUN npm install \
-    && npm run build \
-    && npm run test
+RUN npm install --silent \
+    && npm run build
 
 FROM node:current-alpine3.9 AS runner
 
@@ -23,7 +22,7 @@ COPY --from=Builder --chown=app:app /app/lib/src /app/package.json /app/ormconfi
 COPY --from=Builder --chown=app:app /app/config/ /app/config/
 
 RUN cd app \
-    && npm install
+    && npm install --silent
 
 ENV NODE_ENV production
 ENV PORT 1337
