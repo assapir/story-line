@@ -1,15 +1,13 @@
 import React from "react";
 import * as Resources from "../resources";
-import "./App.scss";
-import "./Common.scss";
+import ButtonAppBar from "./ButtonAppBar";
 import Footer from "./Footer";
 import Main from "./Main";
-import NavBar from "./NavBar";
 
-export default function App() {
+export default function App(): JSX.Element {
   return (
     <div className="app">
-      <NavBar />
+      <ButtonAppBar appName={Resources.projectName} buttonText="login" />
       <Main />
       <Footer
         author={Resources.author}
