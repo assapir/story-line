@@ -1,5 +1,6 @@
 import { Grid, makeStyles, Paper } from "@material-ui/core";
 import React from "react";
+import CommonProps from "./CommonProps";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -10,9 +11,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface GridPaperProps {
+interface GridPaperProps extends CommonProps {
   text?: string;
-  children?: JSX.Element;
 }
 
 export default function GridPaper(props: GridPaperProps): JSX.Element {
@@ -22,7 +22,7 @@ export default function GridPaper(props: GridPaperProps): JSX.Element {
     <div className={classes.paper}>
       <Grid container item xs={12} spacing={3}>
         <Paper className={classes.paper}>
-          <span>{props.text}</span>
+          {props.text ? <span>{props.text}</span> : null}
           {props.children}
         </Paper>
       </Grid>

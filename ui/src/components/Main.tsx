@@ -1,5 +1,6 @@
-import { Container, createStyles, CssBaseline, makeStyles, Typography } from "@material-ui/core";
+import { createStyles, makeStyles, Paper } from "@material-ui/core";
 import React from "react";
+import CommonProps from "../misc/CommonProps";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -9,15 +10,12 @@ const useStyles = makeStyles(() =>
   }),
 );
 
-export default function Main(): JSX.Element {
+export default function Main(props: CommonProps): JSX.Element {
   const classes = useStyles();
 
   return (
-    <React.Fragment>
-      <CssBaseline />
-      <Container maxWidth="sm">
-        <Typography component="div" className={classes.root} />
-      </Container>
-    </React.Fragment>
+    <Paper className={classes.root} square>
+      {props.children}
+    </Paper>
   );
 }
