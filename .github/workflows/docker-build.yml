@@ -44,6 +44,5 @@ jobs:
           registry: docker.pkg.github.com
           repository: ${{ github.repository }}/story-line-api
           tags: ${{ env.TAG }}
-          tag_with_sha: true
           tag_with_ref: true
           add_git_labels: true

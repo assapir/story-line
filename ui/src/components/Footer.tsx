@@ -1,21 +1,28 @@
-import React, { Component } from "react";
+import { Grid } from "@material-ui/core";
+import React from "react";
 import ExternalLink from "../misc/ExternalLink";
-import "./Footer.scss";
+import GridPaper from "../misc/GridPaper";
 
 interface FooterProps {
-    author: string;
-    projectName: string;
-    github: string;
+  author: string;
+  projectName: string;
+  github: string;
 }
 
-export default class Footer extends Component<FooterProps> {
-    public render() {
-        return (
-            <footer className="common">
-                <span>Under MIT License</span>
-                <span>© {this.props.author}</span>
-                <ExternalLink src={this.props.github} text={this.props.projectName} newTab={true}/>
-            </footer>
-        );
-    }
+export default function Footer(props: FooterProps): JSX.Element {
+  const copyrightText = `©  ${props.author}`;
+
+  return (
+    <Grid container spacing={1} justify="center" lg="auto">
+      <GridPaper text="Under MIT License" />
+      <GridPaper text={copyrightText} />
+      <GridPaper>
+        <ExternalLink
+          src={props.github}
+          text={props.projectName}
+          newTab={true}
+        />
+      </GridPaper>
+    </Grid>
+  );
 }
