@@ -13,7 +13,7 @@ export default function Footer(props: FooterProps): JSX.Element {
   const copyrightText = `©  ${props.author}`;
 
   return (
-    <Grid container spacing={1} justify="center" lg="auto">
+    <Grid container justify="center">
       <GridPaper text="Under MIT License" />
       <GridPaper text={copyrightText} />
       <GridPaper>

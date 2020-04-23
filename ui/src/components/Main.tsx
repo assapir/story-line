@@ -1,21 +1,27 @@
-import { createStyles, makeStyles, Paper } from "@material-ui/core";
+import { Container, createStyles, makeStyles } from "@material-ui/core";
 import React from "react";
 import CommonProps from "../misc/CommonProps";
 
-const useStyles = makeStyles(() =>
+interface MainProps extends CommonProps {
+  text?: string;
+}
+
+const useStyles = makeStyles((theme) =>
   createStyles({
     root: {
       flexGrow: 1,
+      textAlign: `justify`,
+      margin: theme.spacing(0, `auto`),
     },
   }),
 );
 
-export default function Main(props: CommonProps): JSX.Element {
+export default function Main(props: MainProps): JSX.Element {
   const classes = useStyles();
 
   return (
-    <Paper className={classes.root} square>
+    <Container className={classes.root} maxWidth="sm">
       {props.children}
-    </Paper>
+    </Container>
   );
 }

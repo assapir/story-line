@@ -5,7 +5,7 @@ import CommonProps from "./CommonProps";
 const useStyles = makeStyles((theme) => ({
   paper: {
     flexGrow: 1,
-    padding: theme.spacing(2),
+    padding: theme.spacing(2, 0),
     textAlign: `center`,
     color: theme.palette.text.secondary,
   },
@@ -20,7 +20,7 @@ export default function GridPaper(props: GridPaperProps): JSX.Element {
 
   return (
     <div className={classes.paper}>
-      <Grid container item xs={12} spacing={3}>
+      <Grid container item>
         <Paper className={classes.paper}>
           {props.text ? <span>{props.text}</span> : null}
           {props.children}
