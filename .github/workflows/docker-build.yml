@@ -46,6 +46,7 @@ jobs:
   PUSH_API:
     name: Push API Docker image to GitHub Packages
     runs-on: ubuntu-latest
+    if: success()
 
     steps:
       - name: Check out the repo
@@ -62,11 +63,12 @@ jobs:
           repository: ${{ github.repository }}/story-line-api
           tags: ${{ env.TAG }}
           add_git_labels: true
-          push: success() && github.ref == 'refs/heads/master'
+          push: github.ref == 'refs/heads/master'
 
   PUSH_UI:
     name: Push API Docker image to GitHub Packages
     runs-on: ubuntu-latest
+    if: success()
 
     steps:
       - name: Check out the repo
@@ -83,5 +85,5 @@ jobs:
           repository: ${{ github.repository }}/story-line-ui
           tags: ${{ env.TAG }}
           add_git_labels: true
-          push: success() && github.ref == 'refs/heads/master'
+          push: github.ref == 'refs/heads/master'
   
