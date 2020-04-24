@@ -9,10 +9,11 @@ on:
     -  master
 
 jobs:
-  CI:
+  API:
+    name: Build Typescript/Express API
     strategy:
       matrix:
-        node-version: [10.x, 12.x]
+        node-version: [10.x, 12.x, 14.x]
     runs-on: ubuntu-latest
 
     steps:
@@ -25,8 +26,25 @@ jobs:
       working-directory: ./api/
       run: npm install --silent && npm test
 
-  CD:
-    name: Push Docker image to GitHub Packages
+  UI:
+    name: Build React UI
+    strategy:
+      matrix:
+        node-version: [10.x, 12.x, 14.x]
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Build and run tests
+      working-directory: ./ui/
+      run: npm install --silent && npm test
+
+  PUSH_API:
+    name: Push API Docker image to GitHub Packages
     runs-on: ubuntu-latest
     if: success() && github.ref == 'refs/heads/master'
 
@@ -44,5 +62,26 @@ jobs:
           registry: docker.pkg.github.com
           repository: ${{ github.repository }}/story-line-api
           tags: ${{ env.TAG }}
-          tag_with_ref: true
           add_git_labels: true
+
+  PUSH_UI:
+    name: Push API Docker image to GitHub Packages
+    runs-on: ubuntu-latest
+    if: success() && github.ref == 'refs/heads/master'
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+      - name: Set image version based on tag
+        run: echo ::set-env name=TAG::$(date +%s)
+      - name: Push to GitHub Packages
+        uses: docker/build-push-action@v1
+        with:
+          path: ./ui/
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: docker.pkg.github.com
+          repository: ${{ github.repository }}/story-line-ui
+          tags: ${{ env.TAG }}
+          add_git_labels: true
+  
