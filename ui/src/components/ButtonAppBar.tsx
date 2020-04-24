@@ -1,9 +1,5 @@
-import AppBar from "@material-ui/core/AppBar";
-import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
+import { AppBar, Button, Container, IconButton, Toolbar, Typography } from "@material-ui/core";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
 import MenuIcon from "@material-ui/icons/Menu";
 import React from "react";
 
@@ -30,23 +26,23 @@ export default function ButtonAppBar(props: ButtonAppBarProps): JSX.Element {
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
+    <Container maxWidth="lg">
       <AppBar position="static" color="transparent">
-        <Toolbar>
-          <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="main"
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" className={classes.title}>
-            {props.appName}
-          </Typography>
-          <Button color="inherit">{props.buttonText}</Button>
-        </Toolbar>
+          <Toolbar>
+            <IconButton
+              edge="start"
+              className={classes.menuButton}
+              color="inherit"
+              aria-label="menu"
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" className={classes.title}>
+              {props.appName}
+            </Typography>
+            <Button color="inherit">{props.buttonText}</Button>
+          </Toolbar>
       </AppBar>
-    </div>
+    </Container>
   );
 }

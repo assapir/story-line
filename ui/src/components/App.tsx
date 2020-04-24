@@ -1,3 +1,4 @@
+import { CssBaseline } from "@material-ui/core";
 import React from "react";
 import * as Resources from "../resources";
 import ButtonAppBar from "./ButtonAppBar";
@@ -6,7 +7,8 @@ import Main from "./Main";
 
 export default function App(): JSX.Element {
   return (
-    <div className="app">
+    <React.Fragment>
+      <CssBaseline />
       <ButtonAppBar appName={Resources.projectName} buttonText="login" />
       <Main />
       <Footer
@@ -14,6 +16,6 @@ export default function App(): JSX.Element {
         projectName={Resources.projectName}
         github={Resources.githubAddress}
       />
-    </div>
+    </React.Fragment>
   );
 }
