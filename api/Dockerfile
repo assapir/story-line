@@ -1,4 +1,4 @@
-FROM node:current-alpine3.9 AS Builder
+FROM node:current-alpine AS Builder
 
 LABEL maintainer="meijin007 AT gmail.com"
 
@@ -9,9 +9,9 @@ ADD . /app
 RUN npm install --silent \
     && npm run build
 
-FROM node:current-alpine3.9 AS runner
+FROM node:current-alpine AS runner
 
-RUN apk add sqlite
+RUN apk --no-cache add sqlite
 
 RUN addgroup --gid 1001 app \
     && adduser -g "First Last,RoomNumber,WorkPhone,HomePhone" -u 1001 -D -G app app

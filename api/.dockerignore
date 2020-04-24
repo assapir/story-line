@@ -1,5 +1,7 @@
-**/node_modules
-**/coverage
-**/.nyc_output
-**/database.sqlite3
-**/lib/**/*
+node_modules
+coverage
+.nyc_output
+database.sqlite3
+lib/**/*
+.dockerignore
+Dockerfile
