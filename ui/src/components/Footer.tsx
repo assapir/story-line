@@ -8,6 +8,9 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       flexGrow: 1,
     },
+    grid: {
+      backgroundColor: theme.palette.primary.main,
+    },
   }),
 );
 interface FooterProps {
@@ -21,18 +24,18 @@ const classes = useStyles();
 const copyrightText = `©  ${props.author}`;
 
 return (
-    <Container className={classes.root}>
-      <Grid container justify="center">
-        <GridPaper text="Under MIT License" />
-        <GridPaper text={copyrightText} />
-        <GridPaper>
-          <ExternalLink
-            src={props.github}
-            text={props.projectName}
-            newTab={true}
-          />
-        </GridPaper>
-      </Grid>
-    </Container>
-  );
+  <Container className={classes.root} maxWidth="lg">
+    <Grid container direction="row" justify="center" alignItems="center">
+      <GridPaper text="Under MIT License" />
+      <GridPaper text={copyrightText} />
+      <GridPaper>
+        <ExternalLink
+          src={props.github}
+          text={props.projectName}
+          newTab={true}
+        />
+      </GridPaper>
+    </Grid>
+  </Container>
+);
 }

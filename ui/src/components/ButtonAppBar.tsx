@@ -7,6 +7,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
+      marginBottom: theme.spacing(2),
     },
     menuButton: {
       marginRight: theme.spacing(2),
@@ -26,22 +27,22 @@ export default function ButtonAppBar(props: ButtonAppBarProps): JSX.Element {
   const classes = useStyles();
 
   return (
-    <Container maxWidth="lg">
-      <AppBar position="static" color="transparent">
-          <Toolbar>
-            <IconButton
-              edge="start"
-              className={classes.menuButton}
-              color="inherit"
-              aria-label="menu"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" className={classes.title}>
-              {props.appName}
-            </Typography>
-            <Button color="inherit">{props.buttonText}</Button>
-          </Toolbar>
+    <Container maxWidth="lg" className={classes.root}>
+      <AppBar position="static" elevation={4}>
+        <Toolbar>
+          <IconButton
+            edge="start"
+            className={classes.menuButton}
+            color="inherit"
+            aria-label="menu"
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" className={classes.title}>
+            {props.appName}
+          </Typography>
+          <Button color="inherit">{props.buttonText}</Button>
+        </Toolbar>
       </AppBar>
     </Container>
   );

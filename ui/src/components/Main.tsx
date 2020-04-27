@@ -13,6 +13,11 @@ const useStyles = makeStyles((theme) =>
       textAlign: `justify`,
       margin: theme.spacing(0, `auto`),
     },
+    main: {
+      backgroundColor: theme.palette.primary.main,
+      color: theme.palette.primary.contrastText,
+      height: `74vh`,
+    },
   }),
 );
 
@@ -21,10 +26,7 @@ export default function Main(): JSX.Element {
 
   return (
     <Container className={classes.root}>
-      <Typography
-        component="div"
-        style={{ backgroundColor: `#cfe8fc`, height: `100vh` }}
-      />
+      <Typography component="div" className={classes.main} />
     </Container>
   );
 }
