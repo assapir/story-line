@@ -27,6 +27,7 @@ jobs:
       run: npm install --silent && npm run test
     - name: Coveralls GitHub Action
       uses: coverallsapp/github-action@v1.1.0
+      working-directory: ./api/
       with:
         github-token: ${{ secrets.COVERALL_TOKEN }}
 
@@ -49,6 +50,7 @@ jobs:
       run: npm install --silent && npm run test
     - name: Coveralls GitHub Action
       uses: coverallsapp/github-action@v1.1.0
+      working-directory: ./ui/
       with:
         github-token: ${{ secrets.COVERALL_TOKEN }}
 
