@@ -9,7 +9,6 @@ ADD . /app
 RUN apk --no-cache add python build-base
 
 RUN npm install --silent \
-    && npm run test:ci \
     && npm run build 
 
 FROM node:current-alpine AS runner
