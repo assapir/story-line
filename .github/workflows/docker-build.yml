@@ -28,7 +28,7 @@ jobs:
     - name: Coveralls GitHub Action
       uses: coverallsapp/github-action@v1.1.0
       with:
-        - github-token: ${{ secrets.COVERALL_TOKEN }}
+        github-token: ${{ secrets.COVERALL_TOKEN }}
 
 
   UI:
@@ -50,7 +50,7 @@ jobs:
     - name: Coveralls GitHub Action
       uses: coverallsapp/github-action@v1.1.0
       with:
-        - github-token: ${{ secrets.COVERALL_TOKEN }}
+        github-token: ${{ secrets.COVERALL_TOKEN }}
 
   PUSH_API:
     name: Push API Docker image to GitHub Packages
