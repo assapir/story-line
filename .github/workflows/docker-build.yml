@@ -27,9 +27,9 @@ jobs:
       run: npm install --silent && npm run test
     - name: Coveralls GitHub Action
       uses: coverallsapp/github-action@v1.1.0
-      path-to-lcov: ./api/coverage/lcov.info
       with:
         github-token: ${{ secrets.COVERALL_TOKEN }}
+        path-to-lcov: ./ui/coverage/lcov.info
 
 
   UI:
@@ -50,9 +50,9 @@ jobs:
       run: npm install --silent && npm run test
     - name: Coveralls GitHub Action
       uses: coverallsapp/github-action@v1.1.0
-      path-to-lcov: ./ui/coverage/lcov.info
       with:
         github-token: ${{ secrets.COVERALL_TOKEN }}
+        path-to-lcov: ./ui/coverage/lcov.info
 
   PUSH_API:
     name: Push API Docker image to GitHub Packages
