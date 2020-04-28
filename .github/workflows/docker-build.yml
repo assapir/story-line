@@ -75,6 +75,7 @@ jobs:
           tags: ${{ env.TAG }}
           build_args: JWT_ARG=${{ secrets.JWT_SECRET }}
           add_git_labels: true
+          tag_with_ref: true
           push: ${{ github.ref == 'refs/heads/master' }}
 
   PUSH_UI:
@@ -97,5 +98,6 @@ jobs:
           repository: ${{ github.repository }}/story-line-ui
           tags: ${{ env.TAG }}
           add_git_labels: true
+          tag_with_ref: true
           push: ${{ github.ref == 'refs/heads/master' }}
   
