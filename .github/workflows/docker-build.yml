@@ -27,7 +27,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: Build and run tests
       working-directory: ./api/
-      run: npm install --silent && npm test:ci
+      run: npm install --silent && npm run test:ci
 
   UI:
     name: Build React UI
@@ -44,7 +44,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: Build and run tests
       working-directory: ./ui/
-      run: npm install --silent && npm test:ci
+      run: npm install --silent && npm trun est:ci
 
   PUSH_API:
     name: Push API Docker image to GitHub Packages
