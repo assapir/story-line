@@ -20,6 +20,10 @@
 -   **Model** which is defined using [TypeORM]([https://typeorm.io/]) as ORM.
     -   Currently using Sqlite3.
 
+## UI
+-   React
+-   MaterialUI
+
 ## Tests
 
 -   Every testable class under `src/` should have a corresponding test suit file in `test/`.
