@@ -24,7 +24,13 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: Build and run tests
       working-directory: ./api/
-      run: npm install --silent && npm test
+      run: npm install --silent && npm run test
+    - name: Coveralls GitHub Action
+      uses: coverallsapp/github-action@v1.1.0
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        path-to-lcov: ./api/coverage/lcov.info
+
 
   UI:
     name: Build React UI
@@ -41,7 +47,12 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: Build and run tests
       working-directory: ./ui/
-      run: npm install --silent && npm test
+      run: npm install --silent && npm run test
+    - name: Coveralls GitHub Action
+      uses: coverallsapp/github-action@v1.1.0
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        path-to-lcov: ./ui/coverage/lcov.info
 
   PUSH_API:
     name: Push API Docker image to GitHub Packages
