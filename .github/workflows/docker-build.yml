@@ -29,7 +29,7 @@ jobs:
       uses: coverallsapp/github-action@v1.1.0
       with:
         github-token: ${{ secrets.COVERALL_TOKEN }}
-        path-to-lcov: ./ui/coverage/lcov.info
+        path-to-lcov: ./api/coverage/lcov.info
 
 
   UI:
