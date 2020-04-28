@@ -1,8 +1,18 @@
-import { Grid } from "@material-ui/core";
+import { Container, createStyles, Grid, makeStyles, Theme } from "@material-ui/core";
 import React from "react";
 import ExternalLink from "../misc/ExternalLink";
 import GridPaper from "../misc/GridPaper";
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      flexGrow: 1,
+    },
+    grid: {
+      backgroundColor: theme.palette.primary.main,
+    },
+  }),
+);
 interface FooterProps {
   author: string;
   projectName: string;
@@ -10,10 +20,12 @@ interface FooterProps {
 }
 
 export default function Footer(props: FooterProps): JSX.Element {
-  const copyrightText = `©  ${props.author}`;
+const classes = useStyles();
+const copyrightText = `©  ${props.author}`;
 
-  return (
-    <Grid container justify="center">
+return (
+  <Container className={classes.root} maxWidth="lg">
+    <Grid container direction="row" justify="center" alignItems="center">
       <GridPaper text="Under MIT License" />
       <GridPaper text={copyrightText} />
       <GridPaper>
@@ -24,5 +36,6 @@ export default function Footer(props: FooterProps): JSX.Element {
         />
       </GridPaper>
     </Grid>
-  );
+  </Container>
+);
 }

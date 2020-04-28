@@ -1,10 +1,10 @@
-import { Container, createStyles, makeStyles } from "@material-ui/core";
+import {
+  Container,
+  createStyles,
+  makeStyles,
+  Typography,
+} from "@material-ui/core";
 import React from "react";
-import CommonProps from "../misc/CommonProps";
-
-interface MainProps extends CommonProps {
-  text?: string;
-}
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -13,15 +13,20 @@ const useStyles = makeStyles((theme) =>
       textAlign: `justify`,
       margin: theme.spacing(0, `auto`),
     },
+    main: {
+      backgroundColor: theme.palette.primary.main,
+      color: theme.palette.primary.contrastText,
+      height: `74vh`,
+    },
   }),
 );
 
-export default function Main(props: MainProps): JSX.Element {
+export default function Main(): JSX.Element {
   const classes = useStyles();
 
   return (
-    <Container className={classes.root} maxWidth="sm">
-      {props.children}
+    <Container className={classes.root}>
+      <Typography component="div" className={classes.main} />
     </Container>
   );
 }

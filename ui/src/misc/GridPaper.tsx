@@ -7,7 +7,6 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     padding: theme.spacing(2, 0),
     textAlign: `center`,
-    color: theme.palette.text.secondary,
   },
 }));
 
@@ -20,9 +19,9 @@ export default function GridPaper(props: GridPaperProps): JSX.Element {
 
   return (
     <div className={classes.paper}>
-      <Grid container item>
-        <Paper className={classes.paper}>
-          {props.text ? <span>{props.text}</span> : null}
+      <Grid item alignItems="center">
+        <Paper className={classes.paper} elevation={4}>
+          {props.text ? props.text : null}
           {props.children}
         </Paper>
       </Grid>
