@@ -10,7 +10,7 @@
     "lint": "tslint --fix --project \"tsconfig.json\"",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "test": "nyc mocha",
-    "test:ci": "npm test && nyc report --reporter=text-lcov | coveralls",
+    "test:ci": "npm test && nyc report --reporter=text-lcov",
     "prod": "tslint --fix --project \"tsconfig.json\" && tsc --inlineSourceMap false --inlineSources false --removeComments true && NODE_ENV=production node ./lib/src/app.js"
   },
   "repository": {

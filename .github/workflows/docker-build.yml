@@ -8,9 +8,6 @@ on:
     branches:
     -  master
 
-env:
-  COVERALLS_REPO_TOKEN: ${{ secrets. COVERALL_TOKEN }}
-
 jobs:
   API:
     name: Build Typescript/Express API
@@ -27,7 +24,12 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: Build and run tests
       working-directory: ./api/
-      run: npm install --silent && npm run test:ci
+      run: npm install --silent && npm run test
+    - name: Coveralls GitHub Action
+      uses: coverallsapp/github-action@v1.1.0
+      with:
+        - github-token: ${{ secrets.COVERALL_TOKEN }}
+
 
   UI:
     name: Build React UI
@@ -44,7 +46,11 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: Build and run tests
       working-directory: ./ui/
-      run: npm install --silent && npm trun est:ci
+      run: npm install --silent && npm run test
+    - name: Coveralls GitHub Action
+      uses: coverallsapp/github-action@v1.1.0
+      with:
+        - github-token: ${{ secrets.COVERALL_TOKEN }}
 
   PUSH_API:
     name: Push API Docker image to GitHub Packages
