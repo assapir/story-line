@@ -15,6 +15,11 @@ FROM node:current-alpine AS runner
 
 ENV NODE_ENV production
 
+ARG JWT_ARG
+ENV JWT_SECRET=$JWT_ARG
+
+ENV PORT 1337
+
 RUN apk --no-cache add sqlite
 
 RUN addgroup --gid 1001 app \
@@ -28,8 +33,6 @@ COPY --from=Builder --chown=app:app /app/node_modules/ /app/node_modules/
 
 RUN cd app \
     && npm install
-
-ENV PORT 1337
 
 EXPOSE ${PORT}
 
