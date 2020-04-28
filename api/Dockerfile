@@ -6,10 +6,14 @@ WORKDIR /app
 
 ADD . /app
 
+RUN apk --no-cache add python build-base
+
 RUN npm install --silent \
     && npm run build
 
 FROM node:current-alpine AS runner
+
+ENV NODE_ENV production
 
 RUN apk --no-cache add sqlite
 
@@ -20,13 +24,13 @@ USER app
 COPY --from=Builder --chown=app:app /app/lib/src /app/package.json /app/ormconfig.js /app/
 # Copy configuration for production
 COPY --from=Builder --chown=app:app /app/config/ /app/config/
+COPY --from=Builder --chown=app:app /app/node_modules/ /app/node_modules/
 
 RUN cd app \
-    && npm install --silent
+    && npm install
 
-ENV NODE_ENV production
 ENV PORT 1337
 
 EXPOSE ${PORT}
 
-CMD [ "node", "/app/app.js"]
+ENTRYPOINT [ "node", "/app/app.js"]
