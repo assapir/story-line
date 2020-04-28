@@ -9,10 +9,7 @@ export interface IPayLoad {
 }
 
 export default class CryptoService {
-    // for production, get it from environment variable
-    private static readonly jwtSecret = config.env === config.ProductionEnvironment ?
-                                config.jwtSecret :
-                                process.env.JWT_SECRET;
+    private static readonly jwtSecret = config.jwtSecret;
 
     public signJWT(payload: IPayLoad): string {
         // throw if the payload is invalid
