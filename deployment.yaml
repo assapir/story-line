@@ -43,7 +43,7 @@ kind: Ingress
 metadata:
   name: story-line-api-ingress
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
   - host: api.storyline
