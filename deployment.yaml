@@ -14,21 +14,23 @@ spec:
       labels:
         app: story-line
     spec:
-      nodeSelector:
-        "beta.kubernetes.io/os": linux
       containers:
         - name: story-line-api
-          image: meijin007/story-line-api
+          image: docker.pkg.github.com/assapir/story-line/story-line-api:latest
           ports:
             - containerPort: 1337
+          envFrom:
+            - secretRef: 
+                name: jwt-secret
+      imagePullSecrets:
+        - name: regcred
 ---
 apiVersion: v1
 kind: Service
 metadata:
+  labels:
+    app: story-line
   name: story-line-api
 spec:
-  type: LoadBalancer
-  ports:
-  - port: 1337
-  selector:
-    app: story-line-api
+  type: ExternalName
+  externalName: story-line-api.com
