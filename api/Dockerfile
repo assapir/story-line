@@ -15,9 +15,6 @@ FROM node:current-alpine AS runner
 
 ENV NODE_ENV production
 
-ARG JWT_ARG
-ENV JWT_SECRET=$JWT_ARG
-
 ENV PORT 1337
 
 RUN apk --no-cache add sqlite

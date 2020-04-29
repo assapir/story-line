@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: story-line-api
+  labels:
+    app: story-line
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: story-line
+  template:
+    metadata:
+      labels:
+        app: story-line
+    spec:
+      containers:
+        - name: story-line-api
+          image: docker.pkg.github.com/assapir/story-line/story-line-api:latest
+          ports:
+            - containerPort: 1337
+          envFrom:
+            - secretRef: 
+                name: jwt-secret
+      imagePullSecrets:
+        - name: regcred
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: story-line
+  name: story-line-api
+spec:
+  ports:
+  - port: 1337
+    protocol: TCP
+  selector:
+    app: story-line
+  type: NodePort
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: story-line-api-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  rules:
+  - host: api.storyline.assaf.tech
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: story-line-api
+          servicePort: 1337
