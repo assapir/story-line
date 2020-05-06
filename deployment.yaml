@@ -33,11 +33,11 @@ metadata:
   name: story-line-api
 spec:
   ports:
-  - port: 1337
+  - port: 80
+    targetPort: 1337
     protocol: TCP
   selector:
     app: story-line
-  type: NodePort
 ---
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
