@@ -1,4 +1,4 @@
-import Link from "@primer/components/src/Link";
+import { Link } from "@primer/components";
 import React from "react";
 
 interface ExternalLinkProps {
@@ -14,6 +14,8 @@ export const ExternalLink = (props: ExternalLinkProps) => {
     : undefined;
 
   return (
-    <Link href={props.href} target={target} rel={rel}/>
+    <Link href={props.href} target={target} rel={rel}>
+      {props.text}
+    </Link>
   );
 };

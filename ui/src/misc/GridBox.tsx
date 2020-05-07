@@ -1,5 +1,4 @@
 import Box from "@primer/components/src/Box";
-import Grid from "@primer/components/src/Grid";
 import React from "react";
 import CommonProps from "./CommonProps";
 
@@ -8,15 +7,16 @@ interface GridPaperProps extends CommonProps {
 }
 
 export default function GridBox(props: GridPaperProps): JSX.Element {
+  const divStyle = {
+    textAlign: `center` as const,
+  };
 
   return (
-    <div>
-      <Grid>
-        <Box p={3} m={0}>
-          {props.text ? props.text : null}
-          {props.children}
-        </Box>
-      </Grid>
+    <div style={divStyle}>
+      <Box padding={3} margin={0}>
+        {props.text ? props.text : null}
+        {props.children}
+      </Box>
     </div>
   );
 }
