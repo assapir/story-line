@@ -1,7 +1,7 @@
 import Grid from "@primer/components/src/Grid";
 import React from "react";
-import { ExternalLink } from "../misc/ExternalLink";
-import GridBox from "../misc/GridBox";
+import { ExternalLink } from "./ExternalLink";
+import GridBox from "./GridBox";
 
 interface FooterProps {
   author: string;

@@ -1,5 +1,6 @@
 import Flex from "@primer/components/src/Flex";
 import React from "react";
+import { Icon } from "./Icon";
 
 interface ButtonAppBarProps {
   appName: string;
@@ -8,8 +9,8 @@ interface ButtonAppBarProps {
 
 export const AppBar = (props: ButtonAppBarProps) => {
   return (
-    <Flex>
-
+    <Flex flexWrap="nowrap">
+      <Icon />
     </Flex>
   );
 };
