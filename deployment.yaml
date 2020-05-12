@@ -20,7 +20,7 @@ spec:
           ports:
             - containerPort: 1337
           envFrom:
-            - secretRef: 
+            - secretRef:
                 name: jwt-secret
       imagePullSecrets:
         - name: regcred
@@ -33,11 +33,11 @@ metadata:
   name: story-line-api
 spec:
   ports:
-  - port: 1337
-    protocol: TCP
+    - port: 1337
+      protocol: TCP
   selector:
     app: story-line
-  type: NodePort
+  type: ClusterIP
 ---
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
@@ -47,10 +47,10 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /$1
 spec:
   rules:
-  - host: api.storyline.assaf.tech
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: story-line-api
-          servicePort: 1337
+    - host: api.storyline.assaf.tech
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: story-line-api
+              servicePort: 1337
