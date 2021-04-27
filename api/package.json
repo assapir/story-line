@@ -59,6 +59,6 @@
     "sqlite3": "^4.2.0",
     "tsconfig-paths": "^3.9.0",
     "typeorm": "^0.2.25",
-    "validator": "^11.1.0"
+    "validator": "^13.6.0"
   }
 }
